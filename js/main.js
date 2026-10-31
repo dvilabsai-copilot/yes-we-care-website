@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const iconCard = (icon, title, copy) => `<article class="icon-card"><span class="feature-icon" aria-hidden="true">${icon}</span><div><h3>${title}</h3><p>${copy}</p></div></article>`;
   const cta = (title, copy = 'Tell us what support you need and our team will help you explore suitable arrangements.') => `<section class="section cta-band"><div><span class="eyebrow">NEED HELP?</span><h2>${title}</h2><p>${copy}</p></div><div class="actions"><a class="btn btn-primary" href="request-assistance.html">Request Assistance <span aria-hidden="true">→</span></a><a href="tel:+919952040006" class="btn btn-secondary">☎ Call Us</a></div></section>`;
 
-  function formMarkup() { return `<p>Fill in the details below and our care coordination team will get in touch with you shortly.</p><form id="enquiry-form" class="enquiry-form" novalidate><div class="form-grid"><label>Full Name *<input name="name" required minlength="2" placeholder="Enter your full name" autocomplete="name"></label><label>Phone Number *<input name="phone" required inputmode="tel" pattern="[0-9+ ()-]{10,16}" placeholder="Enter 10 digit mobile number" autocomplete="tel"></label><label>Email Address (optional)<input name="email" type="email" placeholder="Enter your email" autocomplete="email"></label><label>City / Location *<input name="city" required placeholder="Enter your city or location"></label><label>Service Required *<select name="service" required><option value="">Select a service</option><option value="hospital-assistance">Hospital Assistance</option><option value="home-care">Home Care Assistance</option><option value="elder-care">Elder Care Assistance</option><option value="pre-post-operative-care">Pre- &amp; Post-Operative Care</option><option value="travel-companion">Travel Companion Service</option><option value="healthcare-concierge">Healthcare Concierge</option><option value="corporate-care">Corporate Care</option></select></label><label>Preferred Date (optional)<input name="date" type="date"></label></div><label>Briefly describe your requirement *<textarea name="message" required minlength="10" rows="5" placeholder="Tell us about your requirements, special needs or any additional details"></textarea></label><label class="consent"><input name="consent" type="checkbox" required> I agree to be contacted by YWC regarding my enquiry.</label><button type="submit" class="btn btn-primary">Submit Enquiry <span aria-hidden="true">→</span></button><p class="form-notice">Demo only: this static website does not send or store your enquiry. An enquiry is not a confirmed booking; service confirmation depends on scope, charges and availability.</p><div id="form-feedback" role="status" aria-live="polite"></div></form>`; }
+  function formMarkup() { return `<p>Fill in the details below and our care coordination team will get in touch with you shortly.</p><form id="enquiry-form" class="enquiry-form" novalidate><div class="form-grid"><label>Full Name *<input name="name" required minlength="2" placeholder="Enter your full name" autocomplete="name"></label><label>Phone Number *<input name="phone" required inputmode="tel" pattern="[0-9+ ()-]{10,16}" placeholder="Enter 10 digit mobile number" autocomplete="tel"></label><label>Email Address (optional)<input name="email" type="email" placeholder="Enter your email" autocomplete="email"></label><label>City / Location *<input name="city" required placeholder="Enter your city or location"></label><label>Service Required *<select name="service" required><option value="">Select a service</option><option value="hospital-assistance">Hospital Assistance</option><option value="home-care">Home Care Assistance</option><option value="elder-care">Elder Care Assistance</option><option value="pre-post-operative-care">Pre- &amp; Post-Operative Care</option><option value="travel-companion">Travel Companion Service</option><option value="healthcare-concierge">Healthcare Concierge</option><option value="corporate-care">Corporate Care</option></select></label><label>Preferred Date (optional)<input name="date" type="date"></label></div><label>Briefly describe your requirement *<textarea name="message" required minlength="10" rows="5" placeholder="Tell us about your requirements, special needs or any additional details"></textarea></label><label class="consent"><input name="consent" type="checkbox" required> I agree to be contacted by YWC regarding my enquiry.</label><button type="submit" class="btn btn-primary">Submit Enquiry <span aria-hidden="true">→</span></button><p class="form-notice">Your enquiry will be sent securely to our care coordination team. An enquiry is not a confirmed booking; service confirmation depends on scope, charges and availability.</p><div id="form-feedback" role="status" aria-live="polite"></div></form>`; }
   function faqPreviewMarkup() { return `<details><summary>What is the best way to contact YWC?</summary><p>Call 9952040006 to discuss your requirements, availability and applicable charges.</p></details><details><summary>How soon will I get a response?</summary><p>We will review your enquiry and contact you through the details you provide.</p></details><details><summary>Is my information kept confidential?</summary><p>We use the information only to discuss your enquiry during this local preview.</p></details>`; }
   function faqItems() { const items = [
     ['What is Yes We Care Hospital & Home Assist Pvt. Ltd.?','Yes We Care focuses on healthcare concierge services, elder care assistance, hospital coordination, home assistance arrangements, travel companionship and pre-operative and post-operative support coordination.'],
@@ -170,5 +170,36 @@ document.addEventListener('DOMContentLoaded', () => {
   const select = document.querySelector('select[name=service]');
   if (select && service && [...select.options].some(option => option.value === service)) select.value = service;
   const form = document.getElementById('enquiry-form');
-  form?.addEventListener('submit', event => { event.preventDefault(); const feedback = document.getElementById('form-feedback'); if (!form.checkValidity()) { feedback.className = 'form-error'; feedback.textContent = 'Please complete the required fields and consent checkbox before proceeding.'; form.reportValidity(); return; } feedback.className = 'form-success'; feedback.textContent = 'Demo validation successful. No request has been sent or stored. To arrange assistance, call 9952040006.'; });
+  form?.addEventListener('submit', async event => {
+    event.preventDefault();
+    const feedback = document.getElementById('form-feedback');
+    const button = form.querySelector('button[type=submit]');
+    if (!form.checkValidity()) {
+      feedback.className = 'form-error';
+      feedback.textContent = 'Please complete the required fields and consent checkbox before proceeding.';
+      form.reportValidity();
+      return;
+    }
+    button.disabled = true;
+    feedback.className = '';
+    feedback.textContent = 'Sending your enquiry…';
+    const values = Object.fromEntries(new FormData(form).entries());
+    values.consent = Boolean(form.elements.consent?.checked);
+    try {
+      const response = await fetch(new URL('api/enquiry', document.baseURI), {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(values)
+      });
+      if (!response.ok) throw new Error('delivery-failed');
+      feedback.className = 'form-success';
+      feedback.textContent = 'Thank you. Your enquiry has been sent and our team will contact you shortly.';
+      form.reset();
+    } catch {
+      feedback.className = 'form-error';
+      feedback.textContent = 'We could not send your enquiry right now. Please call 9952040006.';
+    } finally {
+      button.disabled = false;
+    }
+  });
 });

@@ -1,3 +1,5 @@
 original-stitch-export/
 .DS_Store
 Thumbs.db
+.env
+server/.env

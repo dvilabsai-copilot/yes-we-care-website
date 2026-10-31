@@ -1,0 +1,22 @@
+[Unit]
+Description=Yes We Care enquiry email API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/dhisoft/ywc-api
+EnvironmentFile=/var/www/voya-vendor-platform/activity-saas-backend/.env
+EnvironmentFile=/var/www/dhisoft/ywc-api/.env
+ExecStart=/usr/bin/node /var/www/dhisoft/ywc-api/enquiry-api.mjs
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target
