@@ -74,3 +74,43 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
   *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
   .motion-ready .reveal{opacity:1;transform:none}
 }
+.inner-page .page-hero,
+body.page-about .about-hero {
+  isolation: isolate;
+  background: linear-gradient(115deg, #c9efff 0%, #e9f8ff 43%, #ffffff 59%, #effbed 100%);
+}
+
+.inner-page .page-hero::before,
+body.page-about .about-hero::before {
+  z-index: 0;
+  left: -6%;
+  top: -25%;
+  width: 64%;
+  height: 150%;
+  border-radius: 0 54% 54% 0 / 0 50% 50% 0;
+  background: #fff;
+  opacity: 1;
+  transform: skewX(-5deg);
+}
+
+.inner-page .page-hero::after,
+body.page-about .about-hero::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  left: -8%;
+  right: -8%;
+  bottom: -46px;
+  width: auto;
+  height: 96px;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background: #bcecf9;
+  box-shadow: 0 -20px 0 #c9f3bc;
+  pointer-events: none;
+}
+
+.inner-page .page-hero-inner,
+body.page-about .about-hero-inner {
+  z-index: 1;
+  position: relative;
+}
