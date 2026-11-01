@@ -84,6 +84,7 @@ body.page-about .about-hero {
 .inner-page .page-hero::before,
 .inner-page .hero::before,
 body.page-about .about-hero::before {
+  content: "";
   z-index: 0;
   left: -6%;
   top: -25%;
