@@ -3,3 +3,4 @@ original-stitch-export/
 Thumbs.db
 .env
 server/.env
+backups/

@@ -1,0 +1,22 @@
+[Unit]
+Description=Yes We Care NestJS CMS API
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/dhisoft/ywc-cms/backend
+EnvironmentFile=/var/www/voya-vendor-platform/activity-saas-backend/.env
+EnvironmentFile=/var/www/dhisoft/ywc-cms/backend/.env
+ExecStart=/usr/bin/node /var/www/dhisoft/ywc-cms/backend/dist/src/main.js
+Restart=always
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target
