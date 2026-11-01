@@ -1,0 +1,76 @@
+/* Final layer for the YWC visual system. It loads after the legacy approved layout rules. */
+:root{--ux-ink:#09214c;--ux-soft:#476176;--ux-green:#168244;--ux-line:#d9e9eb;--ux-mint:#effaf5}
+html{overflow-x:clip;background:#fff}
+body{overflow-x:clip;color:var(--ux-ink)}
+::selection{background:#bdebd3;color:#082443}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #8de1b5;outline-offset:3px}
+.site-header{border-bottom:1px solid #e7f0ef;box-shadow:0 2px 12px rgba(8,42,61,.06)}
+.nav-shell{min-height:72px}
+.site-header nav a{position:relative;padding:10px 2px;color:#173252}
+.site-header nav a:after{content:"";position:absolute;left:0;right:0;bottom:3px;height:3px;border-radius:3px;background:var(--ux-green);transform:scaleX(0);transform-origin:center;transition:transform .18s ease}
+.site-header nav a:hover:after,.site-header nav a.active:after{transform:scaleX(1)}
+.site-header nav a.active{border-bottom:0;color:var(--ux-green)}
+.phone-pill{display:inline-flex;align-items:center;min-height:42px;padding:9px 15px;background:#fff}
+.btn{min-height:44px;padding:11px 20px;border-radius:999px;box-shadow:none}
+.btn:hover{box-shadow:0 7px 18px rgba(14,92,68,.16);transform:translateY(-2px)}
+.btn:active{transform:translateY(0)}
+.btn-primary{background:var(--ux-green);background-image:none}
+.btn-primary:hover{background:#0d713b;color:#fff}
+.menu-toggle{position:relative;display:none;place-items:center;width:46px;height:46px;padding:0;border:1px solid #d7e9e6;border-radius:12px;background:#effaf8;color:var(--navy)}
+.menu-icon,.menu-icon:before,.menu-icon:after{display:block;width:21px;height:2px;border-radius:3px;background:currentColor;transition:transform .18s ease,opacity .18s ease}
+.menu-icon{position:relative}.menu-icon:before,.menu-icon:after{content:"";position:absolute;left:0}.menu-icon:before{top:-7px}.menu-icon:after{top:7px}
+.menu-toggle.is-open .menu-icon{background:transparent}.menu-toggle.is-open .menu-icon:before{transform:translateY(7px) rotate(45deg)}.menu-toggle.is-open .menu-icon:after{transform:translateY(-7px) rotate(-45deg)}
+.quick-services{border:1px solid #e3f0ed}
+.quick-service{min-height:92px;padding:10px 8px}
+.quick-service strong{font-size:13px;line-height:1.18}
+.service-card,.mini-card,.info-card,.step,.icon-card,.related-card{border-color:var(--ux-line);box-shadow:0 8px 22px rgba(12,52,69,.07)}
+.service-card:hover,.related-card:hover{border-color:#a6d7ba;box-shadow:0 15px 28px rgba(12,72,66,.12)}
+.section-heading p,.readable{color:var(--ux-soft)}
+.inner-page .section-heading p,.inner-page .detail-grid>div>p,.inner-page .corporate-intro p,.inner-page .volunteer-band p{font-size:15px;line-height:1.55}
+.inner-page .icon-card p,.inner-page .faq-preview p,.inner-page .faq-list-modern p{font-size:13px;line-height:1.48}
+.inner-page .service-card-image p{font-size:14px;line-height:1.48}
+.enquiry-form input:not([type=checkbox]),.enquiry-form select,.enquiry-form textarea{min-height:46px;border-color:#b9d6dc}
+.enquiry-form textarea{min-height:130px;resize:vertical}
+.enquiry-form input:not([type=checkbox]):focus,.enquiry-form select:focus,.enquiry-form textarea:focus{border-color:#42ad76;box-shadow:0 0 0 4px rgba(66,173,118,.14);outline:0}
+.faq-list details summary{min-height:44px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.homepage .hero{background:#d9f2fb;position:relative;isolation:isolate}
+.homepage .hero:before{content:"";position:absolute;z-index:0;left:-6%;top:-25%;width:64%;height:150%;border-radius:0 54% 54% 0 / 0 50% 50% 0;background:#fff;opacity:1;transform:skewX(-5deg)}
+.homepage .hero:after{content:"";position:absolute;z-index:0;left:-8%;right:-8%;bottom:-46px;height:96px;border-radius:50% 50% 0 0 / 100% 100% 0 0;background:#bcecf9;box-shadow:0 -20px 0 #c9f3bc;opacity:1}
+.homepage .hero-grid{z-index:1}
+.homepage .hero-copy,.homepage .hero-media{position:relative;z-index:2}
+.homepage .header-cta .btn{white-space:nowrap}
+.reveal{will-change:transform,opacity}
+.motion-ready .reveal{opacity:0;transform:translateY(18px)}
+.motion-ready .reveal.is-visible{opacity:1;transform:none;transition:opacity .55s ease var(--reveal-delay),transform .55s cubic-bezier(.2,.75,.25,1) var(--reveal-delay)}
+.motion-ready .hero.reveal{opacity:1;transform:none}
+.motion-ready .hero .reveal{opacity:1;transform:none}
+@media(max-width:860px){
+  .menu-toggle{display:grid}
+  .site-header nav{top:72px;padding:14px;border:1px solid #e3efed;border-top:0;box-shadow:0 16px 28px rgba(8,42,61,.1)}
+  .site-header nav a{padding:12px 13px;border-radius:9px}
+  .site-header nav a:hover,.site-header nav a.active{background:#effaf5}
+  .site-header nav a:after{display:none}
+  .header-cta .btn{display:none}
+}
+@media(max-width:590px){
+  .container{width:min(100% - 32px,1160px)}
+  .nav-shell{min-height:64px}
+  .phone-pill{min-height:38px;padding:7px 11px;font-size:11px}
+  .hero-copy{padding-top:36px}
+  .hero p{font-size:15px;line-height:1.48}
+  .btn{min-height:46px}
+  .section{padding:52px 0}
+  .quick-service{min-height:86px}
+  .quick-service strong{font-size:11px}
+  .inner-page .section-heading p,.inner-page .detail-grid>div>p{font-size:15px}
+  .inner-page .service-card-image p,.inner-page .icon-card p{font-size:13px}
+}
+@media(max-width:700px){
+  .homepage .hero:before{left:-28%;top:-16%;width:104%;height:116%;border-radius:0 0 58% 42% / 0 0 28% 22%;transform:none}
+  .homepage .hero:after{bottom:-32px;height:70px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+  .motion-ready .reveal{opacity:1;transform:none}
+}

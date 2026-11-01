@@ -3,21 +3,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   const pageKey = path.replace('.html', '') || 'index';
   document.body.classList.add(`page-${pageKey}`);
   if (!['index', 'about'].includes(pageKey)) document.body.classList.add('inner-page');
+  const polishLink = document.createElement('link');
+  polishLink.rel = 'stylesheet';
+  polishLink.href = 'css/ux-polish-final.css';
+  document.head.appendChild(polishLink);
 
   const navItems = [
     ['Home', 'index.html', 'index'], ['About Us', 'about.html', 'about'], ['Services', 'services.html', 'services'],
     ['Corporate Care', 'corporate-care.html', 'corporate-care'], ['Volunteer', 'volunteer.html', 'volunteer'],
     ['Resources', 'faq.html', 'faq'], ['Contact', 'contact.html', 'contact']
   ];
-  const navMarkup = navItems.map(([label, href, key]) => `<a class="${pageKey === key ? 'active' : ''}" href="${href}">${label}${key === 'services' ? ' <span aria-hidden="true">⌄</span>' : ''}</a>`).join('');
-  const headerMarkup = `<header class="site-header"><div class="container nav-shell"><a class="brand" href="index.html" aria-label="Yes We Care Home"><img class="brand-logo" src="assets/logo.jpg" alt="Yes We Care"></a><button id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button><nav id="main-navigation" aria-label="Main navigation">${navMarkup}</nav><div class="header-cta"><a class="phone-pill" href="tel:+919952040006">☎ 99520 40006</a><a class="btn btn-primary" href="request-assistance.html">Request Assistance <span aria-hidden="true">→</span></a></div></div></header>`;
+  const navMarkup = navItems.map(([label, href, key]) => `<a class="${pageKey === key ? 'active' : ''}"${pageKey === key ? ' aria-current="page"' : ''} href="${href}">${label}${key === 'services' ? ' <span aria-hidden="true">⌄</span>' : ''}</a>`).join('');
+  const headerMarkup = `<header class="site-header"><div class="container nav-shell"><a class="brand" href="index.html" aria-label="Yes We Care Home"><img class="brand-logo" src="assets/logo.jpg" alt="Yes We Care"></a><button id="menu-toggle" class="menu-toggle" aria-label="Open navigation" aria-expanded="false"><span class="menu-icon" aria-hidden="true"></span></button><nav id="main-navigation" aria-label="Main navigation">${navMarkup}</nav><div class="header-cta"><a class="phone-pill" href="tel:+919952040006">☎ 99520 40006</a><a class="btn btn-primary" href="request-assistance.html">Request Assistance <span aria-hidden="true">→</span></a></div></div></header>`;
   const footerMarkup = `<footer class="footer"><div class="container footer-grid"><div class="footer-brand"><a href="index.html"><img class="footer-brand-logo" src="assets/logo.jpg" alt="Yes We Care"></a><p>A caring coordination partner for individuals, families and working professionals with healthcare and care assistance arrangements.</p><div class="social-links" aria-label="Social links"><span>f</span><span>◎</span><span>in</span><span>▶</span></div></div><div><h3>Quick Links</h3><a href="index.html">Home</a><a href="about.html">About Us</a><a href="services.html">Our Services</a><a href="corporate-care.html">Corporate Care</a><a href="volunteer.html">Volunteer</a><a href="faq.html">Resources</a><a href="contact.html">Contact</a></div><div><h3>Our Services</h3><a href="hospital-assistance.html">Hospital Assistance</a><a href="home-care.html">Home Care Assistance</a><a href="elder-care.html">Elder Care Assistance</a><a href="pre-post-operative-care.html">Pre- &amp; Post-Operative Care</a><a href="travel-companion.html">Travel Companion</a><a href="healthcare-concierge.html">Healthcare Concierge</a></div><div><h3>Contact Us</h3><a href="tel:+919952040006">☎ 99520 40006</a><p>Okkiyam Thoraipakkam, Chennai – 600097, Tamil Nadu, India.</p><p>Mon – Sat, 9:00 AM – 6:00 PM</p></div><div><h3>Our Location</h3><p>No. A4, Canyon Workspace, Near Idli Vada Sambar Restaurant, Chandrasekaran Avenue, Old Mahabalipuram Road, Okkiyam Thoraipakkam, Chennai – 600097, Tamil Nadu, India.</p><div class="map-placeholder" aria-label="YWC location map"><span>YWC Care Support</span></div></div></div><div class="container fineprint"><p>© 2026 Yes We Care Hospital &amp; Home Assist Pvt. Ltd. All rights reserved.</p><div><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a></div></div><div class="container disclaimer">Service Disclaimer: Services are subject to availability, location, agreed scope and applicable charges unless otherwise agreed. Healthcare coordination and assistance services do not replace professional medical advice, diagnosis or treatment. Clinical services are subject to applicable legal and professional requirements.</div></footer>`;
   document.querySelector('.site-header')?.replaceWith(document.createRange().createContextualFragment(headerMarkup));
   document.querySelector('.footer')?.replaceWith(document.createRange().createContextualFragment(footerMarkup));
 
   const toggle = document.getElementById('menu-toggle');
   const nav = document.getElementById('main-navigation');
-  toggle?.addEventListener('click', () => { const open = nav.classList.toggle('open'); toggle.setAttribute('aria-expanded', String(open)); toggle.textContent = open ? '✕' : '☰'; });
+  toggle?.addEventListener('click', () => { const open = nav.classList.toggle('open'); toggle.setAttribute('aria-expanded', String(open)); toggle.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation'); toggle.classList.toggle('is-open', open); });
 
   const serviceCard = (href, image, icon, title, copy) => `<a class="service-card service-card-image" href="${href}"><img src="assets/${image}" alt="${title}"><div><span class="service-icon" aria-hidden="true">${icon}</span><h3>${title}</h3><p>${copy}</p><span class="card-link">Know More <span aria-hidden="true">→</span></span></div></a>`;
   const relatedCard = (href, icon, title) => `<a class="related-card" href="${href}"><span class="related-icon" aria-hidden="true">${icon}</span><strong>${title}</strong><span aria-hidden="true">→</span></a>`;
@@ -370,4 +374,21 @@ document.addEventListener('DOMContentLoaded', async () => {
       button.disabled = false;
     }
   });
+
+  // Progressive enhancement: motion is opt-in so content remains readable if JS or the observer is unavailable.
+  document.body.classList.add('motion-ready');
+  const revealTargets = [...document.querySelectorAll('main > section, .service-card, .journey-step, .icon-card, .info-card, .faq-list details, .footer-grid > div')];
+  revealTargets.forEach((element, index) => {
+    element.classList.add('reveal');
+    element.style.setProperty('--reveal-delay', `${Math.min(index % 6, 5) * 55}ms`);
+  });
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    revealTargets.forEach(element => element.classList.add('is-visible'));
+  } else {
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }
+    }), { threshold: 0.12, rootMargin: '0px 0px -40px' });
+    revealTargets.forEach(element => observer.observe(element));
+  }
 });
