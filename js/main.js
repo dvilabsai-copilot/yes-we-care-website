@@ -219,6 +219,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   await applyCmsPageContent();
 
+  const setImageSource = (img, source) => {
+    if (!img || !source || img.getAttribute('src') === source) return;
+    img.style.visibility = 'hidden';
+    const reveal = () => {
+      img.style.visibility = '';
+    };
+    img.addEventListener('load', reveal, { once: true });
+    img.addEventListener('error', reveal, { once: true });
+    img.src = source;
+    if (img.complete) reveal();
+  };
+
   // Replace legacy composite screenshots with clean standalone photographs.
   const imageAliases = {
     'assets/care-family.jpg': 'assets/ywc-hero-family.png',
@@ -227,7 +239,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   document.querySelectorAll('img[src]').forEach(img => {
     const replacement = imageAliases[img.getAttribute('src')];
-    if (replacement) img.src = replacement;
+    if (replacement) setImageSource(img, replacement);
   });
   const heroImages = {
     services: 'assets/ywc-hero-family.png',
@@ -245,7 +257,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     volunteer: 'assets/ywc-volunteer-support.png'
   };
   const heroImage = document.querySelector('.page-hero-media img, .hero-media img');
-  if (heroImage && heroImages[pageKey]) heroImage.src = heroImages[pageKey];
+  if (heroImage && heroImages[pageKey]) setImageSource(heroImage, heroImages[pageKey]);
   const serviceImages = {
     'hospital-assistance.html': 'assets/ywc-hospital-support.png',
     'home-care.html': 'assets/ywc-home-care.png',
@@ -257,7 +269,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.querySelectorAll('.service-card').forEach(card => {
     const img = card.querySelector('img');
     const replacement = serviceImages[card.getAttribute('href')];
-    if (img && replacement) img.src = replacement;
+    if (img && replacement) setImageSource(img, replacement);
   });
   if (pageKey === 'index') {
     const whyImage = document.querySelector('.why-visual img');
@@ -271,11 +283,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       'assets/approved-travel.png',
       'assets/approved-corporate.png'
     ];
-    if (homeHero) homeHero.src = 'assets/approved-family-wide.png';
-    if (whyImage) whyImage.src = 'assets/approved-why-wide.png';
-    if (homeCorporate) homeCorporate.src = 'assets/approved-corporate-wide.png';
+    if (homeHero) setImageSource(homeHero, 'assets/approved-family-wide.png');
+    if (whyImage) setImageSource(whyImage, 'assets/approved-why-wide.png');
+    if (homeCorporate) setImageSource(homeCorporate, 'assets/approved-corporate-wide.png');
     document.querySelectorAll('.home-services .service-card img').forEach((img, index) => {
-      if (homeServiceImages[index]) img.src = homeServiceImages[index];
+      if (homeServiceImages[index]) setImageSource(img, homeServiceImages[index]);
     });
   }
   if (pageKey === 'about') {
@@ -291,7 +303,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     ];
     aboutImages.forEach(([selector, source]) => {
       const img = document.querySelector(selector);
-      if (img) img.src = source;
+      if (img) setImageSource(img, source);
     });
   }
   if (pageKey === 'index') {
@@ -325,14 +337,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     'assets/ywc-postoperative-care.png'
   ];
   document.querySelectorAll('.journey-step > img').forEach((img, index) => {
-    if (journeyImages[index]) img.src = journeyImages[index];
+    if (journeyImages[index]) setImageSource(img, journeyImages[index]);
   });
   const corporateIntroImage = document.querySelector('.corporate-intro img');
-  if (corporateIntroImage) corporateIntroImage.src = 'assets/ywc-corporate-intro.png';
+  if (corporateIntroImage) setImageSource(corporateIntroImage, 'assets/ywc-corporate-intro.png');
   const volunteerImage = document.querySelector('.volunteer-band img');
-  if (volunteerImage) volunteerImage.src = 'assets/ywc-volunteer-support.png';
+  if (volunteerImage) setImageSource(volunteerImage, 'assets/ywc-volunteer-support.png');
   const enquiryImage = document.querySelector('.enquiry-photo img');
-  if (enquiryImage) enquiryImage.src = 'assets/ywc-request-consultation.png';
+  if (enquiryImage) setImageSource(enquiryImage, 'assets/ywc-request-consultation.png');
   const service = new URLSearchParams(location.search).get('service');
   const select = document.querySelector('select[name=service]');
   if (select && service && [...select.options].some(option => option.value === service)) select.value = service;
