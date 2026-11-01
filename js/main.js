@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const path = location.pathname.split('/').pop() || 'index.html';
   const pageKey = path.replace('.html', '') || 'index';
   document.body.classList.add(`page-${pageKey}`);
@@ -28,16 +28,16 @@ document.addEventListener('DOMContentLoaded', () => {
   function formMarkup() { return `<p>Fill in the details below and our care coordination team will get in touch with you shortly.</p><form id="enquiry-form" class="enquiry-form" novalidate><div class="form-grid"><label>Full Name *<input name="name" required minlength="2" placeholder="Enter your full name" autocomplete="name"></label><label>Phone Number *<input name="phone" required inputmode="tel" pattern="[0-9+ ()-]{10,16}" placeholder="Enter 10 digit mobile number" autocomplete="tel"></label><label>Email Address (optional)<input name="email" type="email" placeholder="Enter your email" autocomplete="email"></label><label>City / Location *<input name="city" required placeholder="Enter your city or location"></label><label>Service Required *<select name="service" required><option value="">Select a service</option><option value="hospital-assistance">Hospital Assistance</option><option value="home-care">Home Care Assistance</option><option value="elder-care">Elder Care Assistance</option><option value="pre-post-operative-care">Pre- &amp; Post-Operative Care</option><option value="travel-companion">Travel Companion Service</option><option value="healthcare-concierge">Healthcare Concierge</option><option value="corporate-care">Corporate Care</option></select></label><label>Preferred Date (optional)<input name="date" type="date"></label></div><label>Briefly describe your requirement *<textarea name="message" required minlength="10" rows="5" placeholder="Tell us about your requirements, special needs or any additional details"></textarea></label><label class="consent"><input name="consent" type="checkbox" required> I agree to be contacted by YWC regarding my enquiry.</label><button type="submit" class="btn btn-primary">Submit Enquiry <span aria-hidden="true">→</span></button><p class="form-notice">Your enquiry will be sent securely to our care coordination team. An enquiry is not a confirmed booking; service confirmation depends on scope, charges and availability.</p><div id="form-feedback" role="status" aria-live="polite"></div></form>`; }
   function faqPreviewMarkup() { return `<details><summary>What is the best way to contact YWC?</summary><p>Call 9952040006 to discuss your requirements, availability and applicable charges.</p></details><details><summary>How soon will I get a response?</summary><p>We will review your enquiry and contact you through the details you provide.</p></details><details><summary>Is my information kept confidential?</summary><p>We use the information only to discuss your enquiry during this local preview.</p></details>`; }
   function faqItems() { const items = [
-    ['What is Yes We Care Hospital & Home Assist Pvt. Ltd.?','Yes We Care focuses on healthcare concierge services, elder care assistance, hospital coordination, home assistance arrangements, travel companionship and pre-operative and post-operative support coordination.'],
-    ['Do you provide hospital assistance?','We help coordinate hospital-related requirements, including doctor appointments, hospital visits, admission and discharge arrangements and related services, depending on individual needs and availability.'],
-    ['Can you help arrange care for my elderly parents while I am at work?','Yes. Contact us to discuss your parents’ requirements. We can explore suitable assistance options based on the service, location, schedule and availability.'],
-    ['Do you provide post-operative care?','We help coordinate suitable post-operative support, such as home nursing, physiotherapy, follow-up appointments and other recovery-related arrangements, subject to availability and clinical requirements.'],
-    ['Can you arrange a companion for a hospital visit or railway station journey?','You can contact us to discuss travel companion requirements, including accompaniment to hospitals, doctor appointments, diagnostic centres and agreed railway station journeys.'],
-    ['Do you offer free services?','Our services are paid unless otherwise agreed. Volunteer assistance through an eligible employee volunteering initiative is subject to program rules, volunteer availability and agreed arrangements.'],
-    ['Are your services available every day?','Availability depends on the location, service type, schedule and suitable personnel. Please contact us to confirm arrangements for your specific requirements.'],
-    ['Do you provide medical treatment?','Our primary focus is healthcare coordination and assistance arrangements. Medical consultations, diagnosis, prescriptions and clinical treatment must be provided by appropriately qualified and authorized healthcare professionals.'],
-    ['How can a company partner with Yes We Care?','Organizations can contact us to discuss employee wellness, elder care assistance and volunteer support initiatives tailored to their workplace requirements.'],
-    ['How can I book a service?','Call us at 9952040006 to discuss your requirements, availability and applicable charges.']
+    ['What is Yes We Care Hospital & Home Assist Pvt. Ltd.?','Yes We Care Hospital & Home Assist Pvt. Ltd. is focused on healthcare concierge services, elder care assistance, hospital coordination, home assistance arrangements, travel companionship, and pre-operative and post-operative support coordination.'],
+    ['Do you provide hospital assistance?','We help coordinate hospital-related requirements, including doctor appointments, hospital visits, admission and discharge arrangements, and related services, depending on individual needs and availability.'],
+    ['Can you help arrange care for my elderly parents while I am at work?','Yes. You can contact us to discuss your parents\' requirements. We can explore suitable assistance options based on the requested service, location, schedule, and availability.'],
+    ['Do you provide post-operative care?','We help coordinate suitable post-operative support, such as home nursing, physiotherapy, follow-up appointments, and other recovery-related arrangements, subject to availability and clinical requirements.'],
+    ['Can you arrange a companion for a hospital visit or railway station journey?','You can contact us to discuss travel companion requirements, including accompaniment to hospitals, doctor appointments, diagnostic centres, and agreed railway station journeys.'],
+    ['Do you offer free services?','Our services are paid unless otherwise agreed. Any volunteer assistance offered through an eligible employee volunteering initiative is subject to the program\'s rules, volunteer availability, and agreed arrangements.'],
+    ['Are your services available every day?','Availability depends on the location, service type, schedule, and availability of suitable personnel. Please contact us to confirm arrangements for your specific requirements.'],
+    ['Do you provide medical treatment?','Our primary focus is healthcare coordination and assistance arrangements. Medical consultations, diagnosis, prescriptions, and clinical treatment must be provided by appropriately qualified and authorized healthcare professionals.'],
+    ['How can a company partner with Yes We Care?','Organizations can contact us to discuss employee wellness, elder care assistance, and volunteer support initiatives tailored to their workplace requirements.'],
+    ['How can I book a service?','Call us at 9952040006 to discuss your requirements, availability, and applicable charges.']
   ]; return items.map(([q,a],i) => `<details><summary><span class="faq-icon" aria-hidden="true">${['♡','♧','⌖','▤','♧','◎','◉','♧','♧','→'][i]}</span>${q}<span aria-hidden="true">⌄</span></summary><p>${a}</p></details>`).join(''); }
 
   const pageTemplates = {
@@ -51,6 +51,169 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   if (pageTemplates[pageKey]) document.querySelector('main')?.replaceChildren(document.createRange().createContextualFragment(pageTemplates[pageKey]));
+
+  // Load editable CMS content after the approved static layout is rendered.
+  // If the API is unavailable, the existing static page remains unchanged.
+  const cmsApiBase = window.YWC_CMS_API_BASE || (['localhost', '127.0.0.1'].includes(location.hostname)
+    ? 'http://127.0.0.1:4102/api/public'
+    : new URL('api/public', document.baseURI).toString());
+  const setCmsHeading = (heading, title, accentText) => {
+    if (!heading) return;
+    heading.replaceChildren(document.createTextNode(title || ''));
+    if (accentText) {
+      const accent = document.createElement('em');
+      accent.textContent = accentText;
+      heading.append(' ', accent);
+    }
+  };
+  const setCmsHtml = (element, html) => { if (element && html != null) element.innerHTML = html; };
+  const applyCmsItems = (elements, items) => {
+    elements.forEach((element, index) => {
+      const item = items[index];
+      if (!item) return;
+      const title = element.querySelector('h3');
+      const body = element.querySelector('p');
+      if (title && item.title) title.textContent = item.title;
+      if (body && item.bodyHtml != null) setCmsHtml(body, item.bodyHtml);
+    });
+  };
+  const applyCmsFooter = (footerPage) => {
+    const section = footerPage?.sections?.[0];
+    const footer = document.querySelector('footer.footer');
+    if (!section || !footer) return;
+    const config = JSON.parse(section.configJson || '{}');
+    const brandCopy = footer.querySelector('.footer-brand p');
+    if (brandCopy) brandCopy.innerHTML = section.bodyHtml || '';
+    const quickLinks = footer.querySelectorAll('.footer-grid > div:nth-child(2) a');
+    (section.items || []).slice(0, quickLinks.length).forEach((item, index) => {
+      quickLinks[index].textContent = item.title || '';
+      if (item.linkUrl) quickLinks[index].setAttribute('href', item.linkUrl);
+    });
+    const contactColumn = footer.querySelector('.footer-grid > div:nth-child(4)');
+    const contactLink = contactColumn?.querySelector('a[href^="tel:"]');
+    if (contactLink && config.contact) contactLink.textContent = `☎ ${config.contact.replace(/^Contact:\s*/i, '')}`;
+    const locationColumn = footer.querySelector('.footer-grid > div:nth-child(5)');
+    const locationCopy = locationColumn?.querySelector('p');
+    if (locationCopy && config.location) locationCopy.textContent = config.location.replace(/^Location:\s*/i, '');
+    const fineprint = footer.querySelector('.fineprint p');
+    if (fineprint && config.copyright) fineprint.textContent = config.copyright;
+    const disclaimer = footer.querySelector('.disclaimer');
+    if (disclaimer && config.disclaimer) disclaimer.textContent = config.disclaimer;
+  };
+  async function applyCmsPageContent() {
+    const cmsSlug = pageKey === 'index' ? 'home' : pageKey;
+    let timer;
+    try {
+      const controller = new AbortController();
+      timer = setTimeout(() => controller.abort(), 1500);
+      const response = await fetch(`${cmsApiBase}/pages/${encodeURIComponent(cmsSlug)}`, { signal: controller.signal });
+      if (!response.ok) return;
+      const page = await response.json();
+      const footerResponse = await fetch(`${cmsApiBase}/pages/footer`, { signal: controller.signal });
+      if (footerResponse.ok) applyCmsFooter(await footerResponse.json());
+      const sections = Object.fromEntries((page.sections || []).map(section => [section.sectionKey, section]));
+      const staticSections = (page.sections || []).filter(section => section.sectionType === 'STATIC_HTML');
+      if (staticSections.length) {
+        const main = document.querySelector('main');
+        const fragment = document.createDocumentFragment();
+        staticSections.sort((a, b) => a.position - b.position).forEach(section => {
+          try {
+            const config = JSON.parse(section.configJson || '{}');
+            const template = document.createElement('template');
+            template.innerHTML = `${config.openingTag || '<section>'}${section.bodyHtml || ''}${config.closingTag || '</section>'}`;
+            const element = template.content.firstElementChild;
+            if (element) {
+              const heading = element.querySelector('h1, h2, h3');
+              const eyebrow = element.querySelector('.eyebrow');
+              if (heading && section.title) setCmsHeading(heading, section.title, section.accentText);
+              if (eyebrow && section.eyebrow) eyebrow.textContent = section.eyebrow;
+              fragment.appendChild(element);
+            }
+          } catch { /* ignore one malformed section and preserve the remaining page */ }
+        });
+        if (main && fragment.childElementCount) main.replaceChildren(fragment);
+      }
+      const heroSection = sections.hero;
+      const heroCopy = document.querySelector('.page-hero-copy') || document.querySelector('.hero-copy');
+      const heroHeading = heroCopy?.querySelector('h1');
+      if (heroSection && heroHeading) setCmsHeading(heroHeading, heroSection.title, heroSection.accentText);
+      if (heroSection && heroCopy) {
+        const paragraphs = [...heroCopy.querySelectorAll(':scope > p')];
+        setCmsHtml(pageKey === 'index' ? paragraphs[1] : paragraphs[0], heroSection.bodyHtml);
+      }
+
+      if (pageKey === 'index') {
+        const why = sections['why-choose'];
+        if (why) {
+          const root = document.querySelector('.home-why');
+          setCmsHeading(root?.querySelector('h2'), why.title);
+          setCmsHtml(root?.querySelector('.split > div > p'), why.bodyHtml);
+          (why.items || []).forEach((item, index) => { const line = root?.querySelectorAll('.checklist li')[index]; if (line && item.title) line.textContent = item.title; });
+        }
+        const services = sections['services-overview'];
+        if (services) {
+          const root = document.querySelector('.home-services');
+          setCmsHeading(root?.querySelector('h2'), services.title);
+          setCmsHtml(root?.querySelector('.section-intro'), services.bodyHtml);
+          applyCmsItems([...root?.querySelectorAll('.service-card') || []], services.items || []);
+        }
+        const process = sections['how-it-works'];
+        if (process) {
+          const root = document.querySelector('.home-how');
+          setCmsHeading(root?.querySelector('h2'), process.title);
+          setCmsHtml(root?.querySelector('.section-intro'), process.bodyHtml);
+          applyCmsItems([...root?.querySelectorAll('.step') || []], process.items || []);
+        }
+        const corporate = sections['corporate-promo'];
+        if (corporate) {
+          const root = document.querySelector('.home-corporate');
+          setCmsHeading(root?.querySelector('h2'), corporate.title);
+          setCmsHtml(root?.querySelector('.split > div:nth-child(2) > p'), corporate.bodyHtml);
+          (corporate.items || []).forEach((item, index) => { const line = root?.querySelectorAll('.corporate-highlights li strong')[index]; if (line && item.title) line.textContent = item.title; });
+        }
+        const homeCta = sections['home-cta'];
+        if (homeCta) { const root = document.querySelector('.home-cta'); setCmsHeading(root?.querySelector('h2'), homeCta.title); setCmsHtml(root?.querySelector('p'), homeCta.bodyHtml); }
+      }
+
+      if (pageKey === 'services') {
+        const serviceGrid = sections['service-grid'];
+        const root = document.querySelector('.offer-section') || document.querySelector('main');
+        if (serviceGrid) { setCmsHeading(root?.querySelector('.section-heading h2'), serviceGrid.title); setCmsHtml(root?.querySelector('.section-heading p'), serviceGrid.bodyHtml); applyCmsItems([...root?.querySelectorAll('.service-card') || []], serviceGrid.items || []); }
+      }
+      if (pageKey === 'how-it-works') {
+        const journey = sections.journey;
+        const root = document.querySelector('.journey-section');
+        if (journey) { setCmsHeading(root?.querySelector('.section-heading h2'), journey.title); setCmsHtml(root?.querySelector('.section-heading p'), journey.bodyHtml); applyCmsItems([...root?.querySelectorAll('.journey-step') || []], journey.items || []); }
+      }
+      if (pageKey === 'corporate-care') {
+        const intro = sections.intro;
+        const root = document.querySelector('.corporate-intro');
+        if (intro) { setCmsHeading(root?.querySelector('h2'), intro.title); setCmsHtml(root?.querySelector('div > p'), intro.bodyHtml); }
+        const benefits = sections.benefits;
+        const benefitRoot = document.querySelector('.soft');
+        if (benefits) { setCmsHeading(benefitRoot?.querySelector('.section-heading h2'), benefits.title); applyCmsItems([...benefitRoot?.querySelectorAll('.benefit-grid .icon-card') || []], benefits.items || []); }
+      }
+      if (pageKey === 'request-assistance') {
+        const trust = sections['trust-markers'];
+        if (trust) applyCmsItems([...document.querySelectorAll('.trust-markers .icon-card')], trust.items || []);
+        const help = sections['request-help'];
+        const helpRoot = document.querySelector('.request-help');
+        if (help && helpRoot) { setCmsHeading(helpRoot.querySelector('h2'), help.title); setCmsHtml(helpRoot.querySelector(':scope > p'), help.bodyHtml); applyCmsItems([...helpRoot.querySelectorAll('.icon-card')], help.items || []); }
+        const form = sections['request-form'];
+        const formRoot = document.querySelector('.request-form');
+        if (form && formRoot) { setCmsHeading(formRoot.querySelector('h2'), form.title); setCmsHtml(formRoot.querySelector(':scope > p'), form.bodyHtml); }
+        const process = sections.process;
+        const processRoot = document.querySelector('.process-section');
+        if (process && processRoot) { setCmsHeading(processRoot.querySelector('.section-heading h2'), process.title); applyCmsItems([...processRoot.querySelectorAll('.process-grid .icon-card')], process.items || []); }
+        const faq = sections.faq;
+        const faqRoot = document.querySelector('.request-faq');
+        if (faq && faqRoot) { setCmsHeading(faqRoot.querySelector('.section-heading h2'), faq.title); setCmsHtml(faqRoot.querySelector('.section-heading p'), faq.bodyHtml); }
+      }
+      document.documentElement.dataset.cmsLoaded = 'true';
+    } catch { /* static fallback is intentional for offline/local preview use */ }
+    finally { if (timer) clearTimeout(timer); }
+  }
+  await applyCmsPageContent();
 
   // Replace legacy composite screenshots with clean standalone photographs.
   const imageAliases = {
@@ -137,9 +300,9 @@ document.addEventListener('DOMContentLoaded', () => {
       footerLogo.className = 'footer-logo';
     }
     const footerYear = document.querySelector('.homepage .fineprint p');
-    if (footerYear) footerYear.textContent = '© 2025 Yes We Care Hospital & Home Assist Pvt. Ltd. All rights reserved.';
+    if (footerYear && document.documentElement.dataset.cmsLoaded !== 'true') footerYear.textContent = '© 2025 Yes We Care Hospital & Home Assist Pvt. Ltd. All rights reserved.';
     const footerTerms = document.querySelector('.homepage .fineprint a[href="terms.html"]');
-    if (footerTerms) footerTerms.textContent = 'Terms of Use';
+    if (footerTerms && document.documentElement.dataset.cmsLoaded !== 'true') footerTerms.textContent = 'Terms of Use';
     const footerLegal = footerTerms?.parentElement;
     if (footerLegal && !footerLegal.querySelector('[data-home-sitemap]')) {
       const sitemap = document.createElement('a');
@@ -185,8 +348,13 @@ document.addEventListener('DOMContentLoaded', () => {
     feedback.textContent = 'Sending your enquiry…';
     const values = Object.fromEntries(new FormData(form).entries());
     values.consent = Boolean(form.elements.consent?.checked);
+    if (values.date && !values.preferredDate) values.preferredDate = values.date;
+    delete values.date;
+    const enquiryEndpoint = window.YWC_API_BASE || (['localhost', '127.0.0.1'].includes(location.hostname)
+      ? 'http://127.0.0.1:4102/ywc/api/enquiry'
+      : new URL('api/enquiry', document.baseURI).toString());
     try {
-      const response = await fetch(new URL('api/enquiry', document.baseURI), {
+      const response = await fetch(enquiryEndpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(values)
