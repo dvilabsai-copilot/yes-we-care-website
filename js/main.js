@@ -3,21 +3,25 @@ document.addEventListener('DOMContentLoaded', async () => {
   const pageKey = path.replace('.html', '') || 'index';
   document.body.classList.add(`page-${pageKey}`);
   if (!['index', 'about'].includes(pageKey)) document.body.classList.add('inner-page');
+  const polishLink = document.createElement('link');
+  polishLink.rel = 'stylesheet';
+  polishLink.href = 'css/ux-polish-final.css?v=20261120-review';
+  document.head.appendChild(polishLink);
 
   const navItems = [
     ['Home', 'index.html', 'index'], ['About Us', 'about.html', 'about'], ['Services', 'services.html', 'services'],
     ['Corporate Care', 'corporate-care.html', 'corporate-care'], ['Volunteer', 'volunteer.html', 'volunteer'],
     ['Resources', 'faq.html', 'faq'], ['Contact', 'contact.html', 'contact']
   ];
-  const navMarkup = navItems.map(([label, href, key]) => `<a class="${pageKey === key ? 'active' : ''}" href="${href}">${label}${key === 'services' ? ' <span aria-hidden="true">⌄</span>' : ''}</a>`).join('');
-  const headerMarkup = `<header class="site-header"><div class="container nav-shell"><a class="brand" href="index.html" aria-label="Yes We Care Home"><img class="brand-logo" src="assets/logo.jpg" alt="Yes We Care"></a><button id="menu-toggle" class="menu-toggle" aria-label="Toggle navigation" aria-expanded="false">☰</button><nav id="main-navigation" aria-label="Main navigation">${navMarkup}</nav><div class="header-cta"><a class="phone-pill" href="tel:+919952040006">☎ 99520 40006</a><a class="btn btn-primary" href="request-assistance.html">Request Assistance <span aria-hidden="true">→</span></a></div></div></header>`;
-  const footerMarkup = `<footer class="footer"><div class="container footer-grid"><div class="footer-brand"><a href="index.html"><img class="footer-brand-logo" src="assets/logo.jpg" alt="Yes We Care"></a><p>A caring coordination partner for individuals, families and working professionals with healthcare and care assistance arrangements.</p><div class="social-links" aria-label="Social links"><span>f</span><span>◎</span><span>in</span><span>▶</span></div></div><div><h3>Quick Links</h3><a href="index.html">Home</a><a href="about.html">About Us</a><a href="services.html">Our Services</a><a href="corporate-care.html">Corporate Care</a><a href="volunteer.html">Volunteer</a><a href="faq.html">Resources</a><a href="contact.html">Contact</a></div><div><h3>Our Services</h3><a href="hospital-assistance.html">Hospital Assistance</a><a href="home-care.html">Home Care Assistance</a><a href="elder-care.html">Elder Care Assistance</a><a href="pre-post-operative-care.html">Pre- &amp; Post-Operative Care</a><a href="travel-companion.html">Travel Companion</a><a href="healthcare-concierge.html">Healthcare Concierge</a></div><div><h3>Contact Us</h3><a href="tel:+919952040006">☎ 99520 40006</a><p>Okkiyam Thoraipakkam, Chennai – 600097, Tamil Nadu, India.</p><p>Mon – Sat, 9:00 AM – 6:00 PM</p></div><div><h3>Our Location</h3><p>No. A4, Canyon Workspace, Near Idli Vada Sambar Restaurant, Chandrasekaran Avenue, Old Mahabalipuram Road, Okkiyam Thoraipakkam, Chennai – 600097, Tamil Nadu, India.</p><div class="map-placeholder" aria-label="YWC location map"><span>YWC Care Support</span></div></div></div><div class="container fineprint"><p>© 2026 Yes We Care Hospital &amp; Home Assist Pvt. Ltd. All rights reserved.</p><div><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a></div></div><div class="container disclaimer">Service Disclaimer: Services are subject to availability, location, agreed scope and applicable charges unless otherwise agreed. Healthcare coordination and assistance services do not replace professional medical advice, diagnosis or treatment. Clinical services are subject to applicable legal and professional requirements.</div></footer>`;
+  const navMarkup = navItems.map(([label, href, key]) => `<a class="${pageKey === key ? 'active' : ''}"${pageKey === key ? ' aria-current="page"' : ''} href="${href}">${label}${key === 'services' ? ' <span aria-hidden="true">⌄</span>' : ''}</a>`).join('');
+  const headerMarkup = `<header class="site-header"><div class="container nav-shell"><a class="brand" href="index.html" aria-label="Yes We Care Home"><img class="brand-logo" src="assets/logo.jpg" alt="Yes We Care"></a><button id="menu-toggle" class="menu-toggle" aria-label="Open navigation" aria-expanded="false"><span class="menu-icon" aria-hidden="true"></span></button><nav id="main-navigation" aria-label="Main navigation">${navMarkup}</nav><div class="header-cta"><a class="phone-pill" href="tel:+919952040006">☎ 99520 40006</a><a class="btn btn-primary" href="request-assistance.html">Request Assistance <span aria-hidden="true">→</span></a></div></div></header>`;
+  const footerMarkup = `<footer class="footer"><div class="container footer-grid"><div class="footer-brand"><a href="index.html"><img class="footer-brand-logo" src="assets/logo.jpg" alt="Yes We Care"></a><p>A caring coordination partner for individuals, families and working professionals with healthcare and care assistance arrangements.</p><div class="social-links" aria-label="Social links"><span>f</span><span>◎</span><span>in</span><span>▶</span></div></div><div><h3>Quick Links</h3><a href="index.html">Home</a><a href="about.html">About Us</a><a href="services.html">Our Services</a><a href="corporate-care.html">Corporate Care</a><a href="volunteer.html">Volunteer</a><a href="faq.html">Resources</a><a href="contact.html">Contact</a></div><div><h3>Our Services</h3><a href="hospital-assistance.html">Hospital Assistance</a><a href="home-care.html">Home Care Assistance</a><a href="elder-care.html">Elder Care Assistance</a><a href="pre-post-operative-care.html">Pre- &amp; Post-Operative Care</a><a href="travel-companion.html">Travel Companion</a><a href="healthcare-concierge.html">Healthcare Concierge</a></div><div><h3>Contact Us</h3><a href="tel:+919952040006">☎ 99520 40006</a><p>Okkiyam Thoraipakkam, Chennai – 600097, Tamil Nadu, India.</p><p>Mon – Sat, 9:00 AM – 6:00 PM</p></div><div><h3>Our Location</h3><p>No. A4, Chandrasekaran Avenue, Old Mahabalipuram Road, Okkiyam Thoraipakkam, Chennai – 600097, Tamil Nadu, India.</p><div class="map-placeholder" aria-label="YWC location map"><span>YWC Care Support</span></div></div></div><div class="container fineprint"><p>© 2026 Yes We Care Hospital &amp; Home Assist Pvt. Ltd. All rights reserved.</p><div><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a></div></div><div class="container disclaimer">Service Disclaimer: Services are subject to availability, location, agreed scope and applicable charges unless otherwise agreed. Healthcare coordination and assistance services do not replace professional medical advice, diagnosis or treatment. Clinical services are subject to applicable legal and professional requirements.</div></footer>`;
   document.querySelector('.site-header')?.replaceWith(document.createRange().createContextualFragment(headerMarkup));
   document.querySelector('.footer')?.replaceWith(document.createRange().createContextualFragment(footerMarkup));
 
   const toggle = document.getElementById('menu-toggle');
   const nav = document.getElementById('main-navigation');
-  toggle?.addEventListener('click', () => { const open = nav.classList.toggle('open'); toggle.setAttribute('aria-expanded', String(open)); toggle.textContent = open ? '✕' : '☰'; });
+  toggle?.addEventListener('click', () => { const open = nav.classList.toggle('open'); toggle.setAttribute('aria-expanded', String(open)); toggle.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation'); toggle.classList.toggle('is-open', open); });
 
   const serviceCard = (href, image, icon, title, copy) => `<a class="service-card service-card-image" href="${href}"><img src="assets/${image}" alt="${title}"><div><span class="service-icon" aria-hidden="true">${icon}</span><h3>${title}</h3><p>${copy}</p><span class="card-link">Know More <span aria-hidden="true">→</span></span></div></a>`;
   const relatedCard = (href, icon, title) => `<a class="related-card" href="${href}"><span class="related-icon" aria-hidden="true">${icon}</span><strong>${title}</strong><span aria-hidden="true">→</span></a>`;
@@ -45,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     'hospital-assistance': `${hero('Services › Hospital Assistance', 'Hospital', 'Assistance', 'Compassionate support during hospital visits, admissions, treatment and discharge – so you and your loved ones never feel alone.', 'care-family.jpg', 'Hospital assistance for an older adult')}<section class="section detail-section"><div class="container detail-grid"><div><span class="eyebrow">WHAT WE DO</span><h2>Hospital support made easier</h2><p>Our hospital assistance service helps individuals and families coordinate hospital-related requirements when family members cannot be present throughout the process.</p><ul class="checklist"><li>Doctor appointment scheduling and coordination</li><li>Support with hospital visits</li><li>Assistance navigating hospital departments and procedures</li><li>Coordination of admission and discharge formalities</li><li>Diagnostic appointment coordination</li><li>Assistance with collecting and organizing medical reports</li><li>Insurance-related documentation coordination</li><li>Coordination with family members regarding hospital requirements</li></ul><p class="note"><strong>Our goal:</strong> To make hospital visits more organized and less stressful. Medical decisions, clinical procedures and insurance approvals remain the responsibility of qualified professionals and relevant institutions.</p></div><aside class="detail-aside"><div class="request-card"><span class="feature-icon">✚</span><h3>Need Hospital Assistance?</h3><p>Tell us what support you require, where and when. We can discuss suitable arrangements.</p><a class="btn btn-primary" href="request-assistance.html?service=hospital-assistance">Request Assistance <span aria-hidden="true">→</span></a></div><div class="why-card"><h3>Why Choose YWC?</h3>${iconCard('♡','Compassionate support','Personalized help for patients and families.')}${iconCard('♧','Experienced coordination','Clear communication with hospitals and care providers.')}${iconCard('✓','Timely assistance','Reliable updates and practical support throughout the visit.')}</div></aside></div></section><section class="section soft"><div class="container"><div class="section-heading"><span class="eyebrow">WHO IS IT FOR?</span><h2>Support for individuals and families</h2><p>Our hospital assistance service is designed for people who need practical support during medical care and hospital visits.</p></div><div class="audience-grid">${iconCard('♙','Senior citizens','Companionship and support during hospital visits.')}${iconCard('♧','Individuals and families','Guidance through admissions and treatment.')}${iconCard('▣','Patients with ongoing treatments','Regular follow-up and coordination.')}${iconCard('♿','Anyone needing hospital support','Make the experience smoother and less stressful.')}</div></div></section><section class="section related-section"><div class="container"><div class="section-heading"><span class="eyebrow">RELATED SERVICES</span><h2>Explore other care coordination services</h2></div><div class="related-grid">${relatedCard('home-care.html','⌂','Home Care Assistance')}${relatedCard('elder-care.html','♧','Elder Care Assistance')}${relatedCard('pre-post-operative-care.html','♡','Pre- & Post-Operative Care')}${relatedCard('travel-companion.html','✈','Travel Companion')}${relatedCard('healthcare-concierge.html','☏','Healthcare Concierge')}</div></div></section>${cta('Need Assistance for Yourself or a Loved One?')}`,
     'how-it-works': `${hero('How It Works', 'How It', 'Works', 'A simple and structured process to get the right care and assistance for you or your loved ones.', 'care-family.jpg', 'Care coordinator supporting a family')}<section class="section journey-section"><div class="container"><div class="section-heading"><span class="eyebrow">YOUR SUPPORT JOURNEY</span><h2>Your Support Journey in <em>6 Simple Steps</em></h2><p>From your first call to continued support, we make the process simple, compassionate and reliable.</p></div><div class="journey-list"><article class="journey-step"><span class="journey-number">1</span><div class="journey-copy"><span class="feature-icon">☎</span><div><h3>Contact Us</h3><p>Tell us about your healthcare coordination, elder care, home assistance or travel companion requirements.</p></div></div><img src="assets/care-at-home.jpg" alt="Contact YWC for support"></article><article class="journey-step"><span class="journey-number">2</span><div class="journey-copy"><span class="feature-icon">▤</span><div><h3>Share Your Requirements</h3><p>We understand the type of assistance needed, preferred schedule, location and relevant arrangements.</p></div></div><img src="assets/care-family.jpg" alt="Sharing care requirements"></article><article class="journey-step"><span class="journey-number">3</span><div class="journey-copy"><span class="feature-icon">♧</span><div><h3>Explore Available Options</h3><p>We explain suitable service options, applicable charges and availability based on your needs.</p></div></div><img src="assets/care-family.jpg" alt="Exploring service options"></article><article class="journey-step"><span class="journey-number">4</span><div class="journey-copy"><span class="feature-icon">🤝</span><div><h3>Confirm Your Service</h3><p>Once requirements, charges, scope and arrangements are agreed, the service can be confirmed.</p></div></div><img src="assets/corporate-team.jpg" alt="Confirming a service arrangement"></article><article class="journey-step"><span class="journey-number">5</span><div class="journey-copy"><span class="feature-icon">♡</span><div><h3>Receive Assistance</h3><p>We coordinate the agreed service and provide updates as appropriate to the nature of the arrangement.</p></div></div><img src="assets/care-family.jpg" alt="Receiving care assistance"></article><article class="journey-step"><span class="journey-number">6</span><div class="journey-copy"><span class="feature-icon">✓</span><div><h3>Follow-Up</h3><p>Where applicable, we help coordinate follow-up appointments or additional care requirements.</p></div></div><img src="assets/care-at-home.jpg" alt="Follow-up care support"></article></div><p class="readable">Service availability, timelines and the scope of assistance depend on the location and specific requirements.</p></div></section>${cta('Ready to Get Started?','Our team is just a call or message away. Let us help you find the right care and support.')}`,
     'corporate-care': `${hero('Corporate Care', 'Corporate Care &', 'Employee Support', 'A workplace support program that helps organizations build a healthier, happier and more productive workforce through care, guidance and timely assistance.', 'corporate-team.jpg', 'Corporate care and employee support')}<section class="shortcut-strip container"><div>${relatedCard('hospital-assistance.html','✚','Hospital Assistance')}${relatedCard('home-care.html','⌂','Home Care Assistance')}${relatedCard('elder-care.html','♧','Elder Care Assistance')}${relatedCard('pre-post-operative-care.html','♡','Pre- & Post-Operative Care')}${relatedCard('travel-companion.html','✈','Travel Companion')}${relatedCard('healthcare-concierge.html','☏','Healthcare Concierge')}</div></section><section class="section corporate-intro"><div class="container split"><img class="rounded-image" src="assets/corporate-team.jpg" alt="Employees supporting one another"><div><span class="eyebrow">SUPPORT BEYOND THE WORKPLACE</span><h2>Supporting Your People <em>Beyond the Workplace</em></h2><p>Yes We Care aims to help organizations explore an employee support initiative that encourages colleagues to support one another with elder care responsibilities.</p><p>We help coordinate practical support for elderly parents and family members when work schedules make it difficult for employees to be physically present.</p></div></div></section><section class="section soft"><div class="container"><div class="section-heading"><span class="eyebrow">HOW IT HELPS</span><h2>Practical support for employees. Real benefits for your organization.</h2></div><div class="benefit-grid">${iconCard('♧','Easier Care Navigation','Help employees and families find suitable care options quickly and confidently.')}${iconCard('♡','Reduced Stress','Relieve the burden of managing healthcare and caregiving alongside work.')}${iconCard('▥','Greater Productivity','Better-supported employees can focus on work and family responsibilities.')}${iconCard('♢','Trusted and Verified Support','Access to suitable providers and separately arranged professional support when required.')}${iconCard('♧','Inclusive Support','Care coordination for employees, parents and family members.')}${iconCard('◉','Flexible and Customisable','Programs shaped around organizational needs, location and availability.')}</div></div></section><section class="section volunteer-band"><div class="container split"><img class="rounded-image" src="assets/care-family.jpg" alt="People joining hands in a volunteer initiative"><div><span class="eyebrow">EMPLOYEE VOLUNTEER INITIATIVE</span><h2>Employee <em>Volunteer Support</em></h2><p>Employees who wish to participate can register their interest in offering or receiving eligible elder care assistance. Support may include accompanying an elderly person to a doctor appointment, helping with an agreed essential errand or coordinating a railway station drop-off.</p><div class="volunteer-points"><span>Meaningful volunteer opportunities</span><span>Team-led community initiatives</span><span>Care with dignity and respect</span></div><a class="btn btn-outline" href="volunteer.html">Explore the initiative <span aria-hidden="true">→</span></a></div></div></section>${cta('Partner With YWC for a Healthier, Happier Workforce','Organizations interested in introducing an employee wellness, elder care and volunteer support initiative can contact Yes We Care to discuss a suitable program.')}`,
-    contact: `${hero('Contact Us', 'Contact', 'Us', 'Whether you have a question, need guidance, or want to request assistance, our team is here for you. Reach out to us and we will get back to you as soon as possible.', 'care-at-home.jpg', 'YWC care coordination support')}<section class="section contact-methods-section"><div class="container contact-methods">${iconCard('☎','Call Us','9952040006 · Mon – Sat, 9:00 AM – 6:00 PM')}${iconCard('✉','Email Us','Please call to discuss the best contact channel for your enquiry.')}${iconCard('⌖','Our Office','Okkiyam Thoraipakkam, Chennai – 600097, Tamil Nadu, India.')}${iconCard('▣','Request Assistance','Tell us how we can help you and our team will follow up.')}</div></section><section class="section contact-office"><div class="container split"><div class="info-card"><span class="eyebrow">OUR OFFICE</span><h2>Let us help you care for your loved ones</h2><p>Whether you need hospital assistance, elder care support, home assistance, a travel companion or help coordinating post-operative services, we are here to discuss your requirements.</p><div class="office-detail"><strong>Address</strong><span>No. A4, Canyon Workspace, Near Idli Vada Sambar Restaurant, Chandrasekaran Avenue, Old Mahabalipuram Road, Okkiyam Thoraipakkam, Chennai – 600097, Tamil Nadu, India.</span></div><div class="office-detail"><strong>Phone</strong><a href="tel:+919952040006">9952040006</a></div><div class="office-detail"><strong>Hours</strong><span>Monday – Saturday<br>9:00 AM – 6:00 PM</span></div></div><div class="map-large"><span>YWC Care Support Centre</span><strong>Chennai – 600097</strong></div></div></section><section class="section enquiry-section" id="enquiry"><div class="container contact-lower"><div class="enquiry-photo"><img src="assets/care-family.jpg" alt="Care coordinator with a family"></div><div class="info-card"><span class="eyebrow">SEND US A MESSAGE</span><h2>We are here to help</h2>${formMarkup()}</div><div class="faq-preview"><span class="eyebrow">HELP CENTRE</span><h2>Frequently Asked Questions</h2>${faqPreviewMarkup()}</div></div></section>`,
+    contact: `${hero('Contact Us', 'Contact', 'Us', 'Whether you have a question, need guidance, or want to request assistance, our team is here for you. Reach out to us and we will get back to you as soon as possible.', 'care-at-home.jpg', 'YWC care coordination support')}<section class="section contact-methods-section"><div class="container contact-methods">${iconCard('☎','Call Us','9952040006 · Mon – Sat, 9:00 AM – 6:00 PM')}${iconCard('✉','Email Us','Please call to discuss the best contact channel for your enquiry.')}${iconCard('⌖','Our Office','Okkiyam Thoraipakkam, Chennai – 600097, Tamil Nadu, India.')}${iconCard('▣','Request Assistance','Tell us how we can help you and our team will follow up.')}</div></section><section class="section contact-office"><div class="container split"><div class="info-card"><span class="eyebrow">OUR OFFICE</span><h2>Let us help you care for your loved ones</h2><p>Whether you need hospital assistance, elder care support, home assistance, a travel companion or help coordinating post-operative services, we are here to discuss your requirements.</p><div class="office-detail"><strong>Address</strong><span>No. A4, Chandrasekaran Avenue, Old Mahabalipuram Road, Okkiyam Thoraipakkam, Chennai – 600097, Tamil Nadu, India.</span></div><div class="office-detail"><strong>Phone</strong><a href="tel:+919952040006">9952040006</a></div><div class="office-detail"><strong>Hours</strong><span>Monday – Saturday<br>9:00 AM – 6:00 PM</span></div></div><div class="map-large"><span>YWC Care Support Centre</span><strong>Chennai – 600097</strong></div></div></section><section class="section enquiry-section" id="enquiry"><div class="container contact-lower"><div class="enquiry-photo"><img src="assets/care-family.jpg" alt="Care coordinator with a family"></div><div class="info-card"><span class="eyebrow">SEND US A MESSAGE</span><h2>We are here to help</h2>${formMarkup()}</div><div class="faq-preview"><span class="eyebrow">HELP CENTRE</span><h2>Frequently Asked Questions</h2>${faqPreviewMarkup()}</div></div></section>`,
     'request-assistance': `${hero('Request Assistance', 'Request', 'Assistance', 'Tell us your requirement and our team will get in touch with you at the earliest. We are here to coordinate trusted care and support for you and your loved ones.', 'care-family.jpg', 'YWC request assistance support')}<section class="section request-intro"><div class="container trust-markers"><div>${iconCard('♢','Trusted Support','Care coordination shaped around your requirements.')}${iconCard('♧','Personalized Guidance','Clear options based on location and availability.')}${iconCard('♡','Compassionate Coordination','Practical support throughout the care journey.')}</div></div><div class="container request-grid"><div class="info-card request-help"><span class="eyebrow">WE ARE HERE TO HELP</span><h2>Find the right support</h2><p>Whether you need hospital assistance, home care, elder care, post-operative support, travel companionship or any other service, our team will understand your needs and guide you to suitable options.</p>${iconCard('☏','Personalized Support','We listen to your needs and suggest the best care options.')}${iconCard('♧','Experienced Team','Our care coordinators are here to support you at every step.')}${iconCard('♡','End-to-End Coordination','From initial enquiry to service arrangement, we stay with you.')}${iconCard('♢','Confidential and Caring','Your information is treated with compassion during this local preview.')}</div><div class="info-card request-form"><span class="eyebrow">SEND US YOUR REQUEST</span><h2>Tell us what you need</h2>${formMarkup()}</div></div></section><section class="section process-section"><div class="container"><div class="section-heading"><span class="eyebrow">HOW IT WORKS</span><h2>A simple and transparent process</h2></div><div class="process-grid">${iconCard('▤','1. Submit Your Request','Share your details and requirements through the form.')}${iconCard('☏','2. We Get In Touch','Our care coordinator will contact you to understand your needs.')}${iconCard('♧','3. Discuss Options','We suggest suitable services based on your requirements.')}${iconCard('⚙','4. Coordinate Support','We arrange and coordinate the service for you.')}${iconCard('♡','5. Ongoing Assistance','We stay in touch to ensure continuous support.')}</div></div></section><section class="section request-faq"><div class="container faq-shell"><div class="section-heading"><span class="eyebrow">HELP CENTRE</span><h2>Frequently Asked Questions</h2><p>Find answers to common questions about our services and the request process.</p></div>${faqPreviewMarkup()}</div></section>`,
     faq: `${hero('Frequently Asked Questions', 'Frequently Asked', 'Questions', 'Find answers to common questions about our services, process and support. If you need more information, we are always here to help.', 'care-at-home.jpg', 'Care coordinator supporting an older adult')}<section class="section faq-section"><div class="container faq-shell"><div class="faq-heading"><div><span class="eyebrow">HELP CENTRE</span><h2>Frequently Asked Questions</h2><p>Explore the most common questions about YWC care coordination services, coverage, service availability and more.</p></div><span class="faq-mark" aria-hidden="true">?</span></div><div class="faq-list faq-list-modern">${faqItems()}</div><div class="faq-contact"><span class="feature-icon">☏</span><div><h3>Still have questions?</h3><p>Our team is here to help. Get in touch with us for personalized assistance.</p></div><a class="btn btn-primary" href="contact.html#enquiry">Contact Us <span aria-hidden="true">→</span></a></div></div></section>`
   };
@@ -77,6 +81,31 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (body && item.bodyHtml != null) setCmsHtml(body, item.bodyHtml);
     });
   };
+  const serviceOrder = ['elder-care', 'hospital-assistance', 'home-care', 'pre-post-operative-care', 'travel-companion', 'healthcare-concierge'];
+  const serviceSlug = element => element?.getAttribute('href')?.split('/').pop()?.replace(/\.html(?:\?.*)?$/, '');
+  const reorderServices = (group, order = serviceOrder) => {
+    if (!group) return;
+    const links = [...group.querySelectorAll(':scope > a')];
+    const bySlug = new Map(links.map(link => [serviceSlug(link), link]));
+    const ordered = order.map(slug => bySlug.get(slug)).filter(Boolean);
+    if (ordered.length === links.length && ordered.length) group.append(...ordered);
+  };
+  const applyCmsServiceItems = (elements, items) => {
+    const bySlug = new Map((items || []).map(item => [item.linkUrl?.split('/').pop()?.replace(/\.html(?:\?.*)?$/, ''), item]));
+    elements.forEach(element => {
+      const item = bySlug.get(serviceSlug(element));
+      if (!item) return;
+      const title = element.querySelector('h3');
+      const body = element.querySelector('p');
+      if (title && item.title) title.textContent = item.title;
+      if (body && item.bodyHtml != null) setCmsHtml(body, item.bodyHtml);
+    });
+    if (elements[0]?.parentElement) reorderServices(elements[0].parentElement);
+  };
+  const orderServiceNavigation = () => {
+    document.querySelectorAll('.quick-services-grid, .home-services .card-grid, .offer-section .card-grid, .footer-grid > div:nth-child(3), .shortcut-strip > div').forEach(group => reorderServices(group));
+  };
+  orderServiceNavigation();
   const applyCmsFooter = (footerPage) => {
     const section = footerPage?.sections?.[0];
     const footer = document.querySelector('footer.footer');
@@ -125,7 +154,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             if (element) {
               const heading = element.querySelector('h1, h2, h3');
               const eyebrow = element.querySelector('.eyebrow');
-              if (heading && section.title) setCmsHeading(heading, section.title, section.accentText);
+              if (heading && section.title) {
+                const aboutLead = heading.matches('.about-hero-copy h1') && heading.firstChild;
+                if (pageKey === 'about' && aboutLead?.nodeType === Node.TEXT_NODE && heading.querySelector(':scope > br')) {
+                  aboutLead.textContent = section.title.replace(/\s*Care That Connects$/, '');
+                } else {
+                  setCmsHeading(heading, section.title, section.accentText);
+                }
+              }
               if (eyebrow && section.eyebrow) eyebrow.textContent = section.eyebrow;
               fragment.appendChild(element);
             }
@@ -155,7 +191,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           const root = document.querySelector('.home-services');
           setCmsHeading(root?.querySelector('h2'), services.title);
           setCmsHtml(root?.querySelector('.section-intro'), services.bodyHtml);
-          applyCmsItems([...root?.querySelectorAll('.service-card') || []], services.items || []);
+          applyCmsServiceItems([...root?.querySelectorAll('.service-card') || []], services.items || []);
         }
         const process = sections['how-it-works'];
         if (process) {
@@ -178,7 +214,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (pageKey === 'services') {
         const serviceGrid = sections['service-grid'];
         const root = document.querySelector('.offer-section') || document.querySelector('main');
-        if (serviceGrid) { setCmsHeading(root?.querySelector('.section-heading h2'), serviceGrid.title); setCmsHtml(root?.querySelector('.section-heading p'), serviceGrid.bodyHtml); applyCmsItems([...root?.querySelectorAll('.service-card') || []], serviceGrid.items || []); }
+        if (serviceGrid) { setCmsHeading(root?.querySelector('.section-heading h2'), serviceGrid.title); setCmsHtml(root?.querySelector('.section-heading p'), serviceGrid.bodyHtml); applyCmsServiceItems([...root?.querySelectorAll('.service-card') || []], serviceGrid.items || []); }
       }
       if (pageKey === 'how-it-works') {
         const journey = sections.journey;
@@ -209,11 +245,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         const faqRoot = document.querySelector('.request-faq');
         if (faq && faqRoot) { setCmsHeading(faqRoot.querySelector('.section-heading h2'), faq.title); setCmsHtml(faqRoot.querySelector('.section-heading p'), faq.bodyHtml); }
       }
+      orderServiceNavigation();
       document.documentElement.dataset.cmsLoaded = 'true';
     } catch { /* static fallback is intentional for offline/local preview use */ }
     finally { if (timer) clearTimeout(timer); }
   }
   await applyCmsPageContent();
+
+  const setImageSource = (img, source) => {
+    if (!img || !source || img.getAttribute('src') === source) return;
+    img.style.visibility = 'hidden';
+    const reveal = () => {
+      img.style.visibility = '';
+    };
+    img.addEventListener('load', reveal, { once: true });
+    img.addEventListener('error', reveal, { once: true });
+    img.src = source;
+    if (img.complete) reveal();
+  };
 
   // Replace legacy composite screenshots with clean standalone photographs.
   const imageAliases = {
@@ -223,7 +272,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   };
   document.querySelectorAll('img[src]').forEach(img => {
     const replacement = imageAliases[img.getAttribute('src')];
-    if (replacement) img.src = replacement;
+    if (replacement) setImageSource(img, replacement);
   });
   const heroImages = {
     services: 'assets/ywc-hero-family.png',
@@ -241,7 +290,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     volunteer: 'assets/ywc-volunteer-support.png'
   };
   const heroImage = document.querySelector('.page-hero-media img, .hero-media img');
-  if (heroImage && heroImages[pageKey]) heroImage.src = heroImages[pageKey];
+  if (heroImage && heroImages[pageKey]) setImageSource(heroImage, heroImages[pageKey]);
   const serviceImages = {
     'hospital-assistance.html': 'assets/ywc-hospital-support.png',
     'home-care.html': 'assets/ywc-home-care.png',
@@ -253,7 +302,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.querySelectorAll('.service-card').forEach(card => {
     const img = card.querySelector('img');
     const replacement = serviceImages[card.getAttribute('href')];
-    if (img && replacement) img.src = replacement;
+    if (img && replacement) setImageSource(img, replacement);
   });
   if (pageKey === 'index') {
     const whyImage = document.querySelector('.why-visual img');
@@ -267,11 +316,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       'assets/approved-travel.png',
       'assets/approved-corporate.png'
     ];
-    if (homeHero) homeHero.src = 'assets/approved-family-wide.png';
-    if (whyImage) whyImage.src = 'assets/approved-why-wide.png';
-    if (homeCorporate) homeCorporate.src = 'assets/approved-corporate-wide.png';
+    if (homeHero) setImageSource(homeHero, 'assets/approved-family-wide.png');
+    if (whyImage) setImageSource(whyImage, 'assets/approved-why-wide.png');
+    if (homeCorporate) setImageSource(homeCorporate, 'assets/approved-corporate-wide.png');
     document.querySelectorAll('.home-services .service-card img').forEach((img, index) => {
-      if (homeServiceImages[index]) img.src = homeServiceImages[index];
+      if (homeServiceImages[index]) setImageSource(img, homeServiceImages[index]);
     });
   }
   if (pageKey === 'about') {
@@ -287,7 +336,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     ];
     aboutImages.forEach(([selector, source]) => {
       const img = document.querySelector(selector);
-      if (img) img.src = source;
+      if (img) setImageSource(img, source);
     });
   }
   if (pageKey === 'index') {
@@ -321,18 +370,44 @@ document.addEventListener('DOMContentLoaded', async () => {
     'assets/ywc-postoperative-care.png'
   ];
   document.querySelectorAll('.journey-step > img').forEach((img, index) => {
-    if (journeyImages[index]) img.src = journeyImages[index];
+    if (journeyImages[index]) setImageSource(img, journeyImages[index]);
   });
   const corporateIntroImage = document.querySelector('.corporate-intro img');
-  if (corporateIntroImage) corporateIntroImage.src = 'assets/ywc-corporate-intro.png';
+  if (corporateIntroImage) setImageSource(corporateIntroImage, 'assets/ywc-corporate-intro.png');
   const volunteerImage = document.querySelector('.volunteer-band img');
-  if (volunteerImage) volunteerImage.src = 'assets/ywc-volunteer-support.png';
+  if (volunteerImage) setImageSource(volunteerImage, 'assets/ywc-volunteer-support.png');
   const enquiryImage = document.querySelector('.enquiry-photo img');
-  if (enquiryImage) enquiryImage.src = 'assets/ywc-request-consultation.png';
+  if (enquiryImage) setImageSource(enquiryImage, 'assets/ywc-request-consultation.png');
+  if (pageKey === 'services') {
+    const orderedServices = ['elder-care', 'hospital-assistance', 'home-care', 'pre-post-operative-care',
+      'healthcare-concierge', 'travel-companion'];
+    const cards = [...document.querySelectorAll('main .service-card')];
+    const bySlug = new Map(cards.map(card => [card.getAttribute('href')?.replace(/\.html$/, ''), card]));
+    const grid = cards[0]?.parentElement;
+    if (grid && cards.length === orderedServices.length && cards.every(card => card.parentElement === grid) &&
+        orderedServices.every(slug => bySlug.has(slug))) {
+      grid.append(...orderedServices.map(slug => bySlug.get(slug)));
+    }
+  }
   const service = new URLSearchParams(location.search).get('service');
   const select = document.querySelector('select[name=service]');
   if (select && service && [...select.options].some(option => option.value === service)) select.value = service;
   const form = document.getElementById('enquiry-form');
+  function showEnquiryThanks() {
+    if (typeof HTMLDialogElement === 'undefined') return;
+    let dialog = document.querySelector('.enquiry-thanks');
+    if (!dialog) {
+      dialog = document.createElement('dialog');
+      dialog.className = 'enquiry-thanks';
+      dialog.setAttribute('aria-labelledby', 'enquiry-thanks-title');
+      dialog.innerHTML = '<h2 id="enquiry-thanks-title">Thank you</h2><p>Your enquiry has been received. ' +
+        'The YWC team will contact you using the details you provided.</p>' +
+        '<form method="dialog"><button type="submit" class="btn btn-primary" autofocus>Done</button></form>';
+      document.body.append(dialog);
+    }
+    if (!dialog.open) dialog.showModal();
+  }
+
   form?.addEventListener('submit', async event => {
     event.preventDefault();
     const feedback = document.getElementById('form-feedback');
@@ -361,8 +436,9 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
       if (!response.ok) throw new Error('delivery-failed');
       feedback.className = 'form-success';
-      feedback.textContent = 'Thank you. Your enquiry has been sent and our team will contact you shortly.';
+      feedback.textContent = 'Thank you. Your enquiry has been received.';
       form.reset();
+      showEnquiryThanks();
     } catch {
       feedback.className = 'form-error';
       feedback.textContent = 'We could not send your enquiry right now. Please call 9952040006.';
@@ -370,4 +446,21 @@ document.addEventListener('DOMContentLoaded', async () => {
       button.disabled = false;
     }
   });
+
+  // Progressive enhancement: motion is opt-in so content remains readable if JS or the observer is unavailable.
+  document.body.classList.add('motion-ready');
+  const revealTargets = [...document.querySelectorAll('main > section, .service-card, .journey-step, .icon-card, .info-card, .faq-list details, .footer-grid > div')];
+  revealTargets.forEach((element, index) => {
+    element.classList.add('reveal');
+    element.style.setProperty('--reveal-delay', `${Math.min(index % 6, 5) * 55}ms`);
+  });
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion || !('IntersectionObserver' in window)) {
+    revealTargets.forEach(element => element.classList.add('is-visible'));
+  } else {
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }
+    }), { threshold: 0.12, rootMargin: '0px 0px -40px' });
+    revealTargets.forEach(element => observer.observe(element));
+  }
 });

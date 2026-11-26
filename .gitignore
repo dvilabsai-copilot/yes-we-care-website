@@ -4,3 +4,4 @@ Thumbs.db
 .env
 server/.env
 backups/
+.taste-skill/
