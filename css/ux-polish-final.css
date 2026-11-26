@@ -120,3 +120,28 @@ body.page-about .about-hero-inner {
   z-index: 1;
   position: relative;
 }
+
+/* Keep service imagery beside the heading when the approved introduction is long. */
+@media (min-width: 761px) {
+  body:is(.page-hospital-assistance, .page-home-care, .page-elder-care,
+    .page-pre-post-operative-care, .page-travel-companion, .page-healthcare-concierge) .hero-grid > .hero-media {
+    align-self: start;
+    margin-top: clamp(1.5rem, 4vw, 3.5rem);
+  }
+}
+
+/* Shown only after the enquiry API confirms receipt. */
+.enquiry-thanks {
+  width: min(28rem, calc(100% - 2rem));
+  max-width: none;
+  margin: auto;
+  padding: 1.75rem;
+  border: 1px solid #dce8e1;
+  border-radius: 1rem;
+  color: var(--navy, #0b1c3d);
+  background: #fff;
+  box-shadow: 0 1rem 3rem #0b1c3d38;
+}
+.enquiry-thanks::backdrop { background: #0b1c3d8c; }
+.enquiry-thanks h2 { margin: 0 0 .5rem; }
+.enquiry-thanks p { margin: 0 0 1.25rem; }
