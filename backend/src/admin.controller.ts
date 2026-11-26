@@ -3,7 +3,37 @@ import sanitizeHtml from 'sanitize-html';
 import { AdminAuthGuard } from './auth';
 import { PrismaService } from './prisma.service';
 
-export const sanitizeContentHtml = (value?: string | null) => value == null ? value : sanitizeHtml(String(value), { allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img']), allowedAttributes: { ...sanitizeHtml.defaults.allowedAttributes, img: ['src', 'alt', 'width', 'height'] }, allowedSchemes: ['http', 'https', 'mailto', 'tel'] });
+const contentHtmlOptions: sanitizeHtml.IOptions = {
+  allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img', 'form', 'label', 'input', 'select', 'option', 'textarea', 'button', 'details', 'summary'],
+  allowedAttributes: {
+    ...sanitizeHtml.defaults.allowedAttributes,
+    '*': ['class', 'aria-hidden', 'aria-label', 'aria-live', 'role'],
+    div: [{ name: 'id', values: ['form-feedback'] }],
+    img: ['src', 'alt', 'width', 'height', 'loading'],
+    form: ['novalidate', { name: 'id', values: ['enquiry-form'] }],
+    label: ['for'],
+    input: ['name', 'value', 'required', 'minlength', 'placeholder', 'autocomplete', 'inputmode', 'pattern',
+      { name: 'type', values: ['text', 'tel', 'email', 'date', 'checkbox'] }],
+    select: ['name', 'required'],
+    option: ['value', 'selected'],
+    textarea: ['name', 'required', 'minlength', 'maxlength', 'rows', 'placeholder'],
+    button: [{ name: 'type', values: ['button', 'submit', 'reset'] }]
+  },
+  allowedSchemes: ['http', 'https', 'mailto', 'tel'],
+  transformTags: {
+    '*': (tagName, attribs) => {
+      if ((tagName === 'form' && attribs.id !== 'enquiry-form') ||
+          (tagName === 'div' && attribs.id !== 'form-feedback')) {
+        delete attribs.id;
+      }
+      return { tagName, attribs };
+    }
+  }
+};
+
+export function sanitizeContentHtml(value?: string | null) {
+  return value == null ? value : sanitizeHtml(String(value), contentHtmlOptions);
+}
 
 @Controller('api/admin')
 @UseGuards(AdminAuthGuard)
