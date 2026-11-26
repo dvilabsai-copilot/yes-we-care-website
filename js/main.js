@@ -81,6 +81,31 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (body && item.bodyHtml != null) setCmsHtml(body, item.bodyHtml);
     });
   };
+  const serviceOrder = ['elder-care', 'hospital-assistance', 'home-care', 'pre-post-operative-care', 'travel-companion', 'healthcare-concierge'];
+  const serviceSlug = element => element?.getAttribute('href')?.split('/').pop()?.replace(/\.html(?:\?.*)?$/, '');
+  const reorderServices = (group, order = serviceOrder) => {
+    if (!group) return;
+    const links = [...group.querySelectorAll(':scope > a')];
+    const bySlug = new Map(links.map(link => [serviceSlug(link), link]));
+    const ordered = order.map(slug => bySlug.get(slug)).filter(Boolean);
+    if (ordered.length === links.length && ordered.length) group.append(...ordered);
+  };
+  const applyCmsServiceItems = (elements, items) => {
+    const bySlug = new Map((items || []).map(item => [item.linkUrl?.split('/').pop()?.replace(/\.html(?:\?.*)?$/, ''), item]));
+    elements.forEach(element => {
+      const item = bySlug.get(serviceSlug(element));
+      if (!item) return;
+      const title = element.querySelector('h3');
+      const body = element.querySelector('p');
+      if (title && item.title) title.textContent = item.title;
+      if (body && item.bodyHtml != null) setCmsHtml(body, item.bodyHtml);
+    });
+    if (elements[0]?.parentElement) reorderServices(elements[0].parentElement);
+  };
+  const orderServiceNavigation = () => {
+    document.querySelectorAll('.quick-services-grid, .home-services .card-grid, .offer-section .card-grid, .footer-grid > div:nth-child(3), .shortcut-strip > div').forEach(group => reorderServices(group));
+  };
+  orderServiceNavigation();
   const applyCmsFooter = (footerPage) => {
     const section = footerPage?.sections?.[0];
     const footer = document.querySelector('footer.footer');
@@ -159,7 +184,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           const root = document.querySelector('.home-services');
           setCmsHeading(root?.querySelector('h2'), services.title);
           setCmsHtml(root?.querySelector('.section-intro'), services.bodyHtml);
-          applyCmsItems([...root?.querySelectorAll('.service-card') || []], services.items || []);
+          applyCmsServiceItems([...root?.querySelectorAll('.service-card') || []], services.items || []);
         }
         const process = sections['how-it-works'];
         if (process) {
@@ -182,7 +207,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (pageKey === 'services') {
         const serviceGrid = sections['service-grid'];
         const root = document.querySelector('.offer-section') || document.querySelector('main');
-        if (serviceGrid) { setCmsHeading(root?.querySelector('.section-heading h2'), serviceGrid.title); setCmsHtml(root?.querySelector('.section-heading p'), serviceGrid.bodyHtml); applyCmsItems([...root?.querySelectorAll('.service-card') || []], serviceGrid.items || []); }
+        if (serviceGrid) { setCmsHeading(root?.querySelector('.section-heading h2'), serviceGrid.title); setCmsHtml(root?.querySelector('.section-heading p'), serviceGrid.bodyHtml); applyCmsServiceItems([...root?.querySelectorAll('.service-card') || []], serviceGrid.items || []); }
       }
       if (pageKey === 'how-it-works') {
         const journey = sections.journey;
@@ -213,6 +238,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const faqRoot = document.querySelector('.request-faq');
         if (faq && faqRoot) { setCmsHeading(faqRoot.querySelector('.section-heading h2'), faq.title); setCmsHtml(faqRoot.querySelector('.section-heading p'), faq.bodyHtml); }
       }
+      orderServiceNavigation();
       document.documentElement.dataset.cmsLoaded = 'true';
     } catch { /* static fallback is intentional for offline/local preview use */ }
     finally { if (timer) clearTimeout(timer); }
