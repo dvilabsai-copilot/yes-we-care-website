@@ -3,7 +3,7 @@ import nodemailer from '/var/www/voya-vendor-platform/activity-saas-backend/node
 
 const port = Number(process.env.ENQUIRY_API_PORT || 4101);
 const allowedOrigin = process.env.ENQUIRY_ALLOWED_ORIGIN || 'https://demo.dhisoft.in';
-const recipient = process.env.ENQUIRY_TO_EMAIL;
+const recipient = process.env.ENQUIRY_TO_EMAIL || 'info@ywc.care';
 
 const json = (res, status, body) => {
   res.writeHead(status, {
