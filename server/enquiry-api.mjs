@@ -2,7 +2,7 @@ import http from 'node:http';
 import nodemailer from '/var/www/voya-vendor-platform/activity-saas-backend/node_modules/nodemailer/dist/esm/nodemailer.js';
 
 const port = Number(process.env.ENQUIRY_API_PORT || 4101);
-const allowedOrigin = process.env.ENQUIRY_ALLOWED_ORIGIN || 'https://demo.dhisoft.in';
+const allowedOrigin = process.env.ENQUIRY_ALLOWED_ORIGIN || 'https://ywc.care';
 const recipient = process.env.ENQUIRY_TO_EMAIL || 'info@ywc.care';
 
 const json = (res, status, body) => {
@@ -32,7 +32,7 @@ const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, character =>
 const serviceLabel = value => String(value || 'Not specified').replaceAll('-', ' ').replace(/\b\w/g, character => character.toUpperCase());
 
 const renderEnquiryHtml = ({ name, phone, email, city, service, date, message }) => {
-  const logoUrl = 'https://demo.dhisoft.in/ywc/assets/logo-transparent.png';
+  const logoUrl = 'https://ywc.care/assets/logo-transparent.png';
   const row = (label, value) => `<tr><td style="padding:10px 12px;border-bottom:1px solid #dce9ee;color:#587080;font-size:13px;width:38%;">${escapeHtml(label)}</td><td style="padding:10px 12px;border-bottom:1px solid #dce9ee;color:#0b1c3d;font-size:14px;font-weight:700;">${escapeHtml(value || 'Not provided')}</td></tr>`;
   return `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><meta name="color-scheme" content="light"><title>New YWC enquiry</title></head>
@@ -44,9 +44,9 @@ const renderEnquiryHtml = ({ name, phone, email, city, service, date, message })
       <tr><td style="padding:30px 30px 24px;"><div style="font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#158478;margin-bottom:10px;">NEW ENQUIRY RECEIVED</div><h1 style="margin:0 0 14px;color:#0b1c3d;font-size:27px;line-height:1.25;">A new care enquiry needs your attention</h1><p style="margin:0;color:#52657c;font-size:15px;line-height:1.6;">Someone has submitted a request through the YWC website. Please review the details below and contact them to discuss suitable support.</p>
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin:24px 0 20px;border:1px solid #dce9ee;border-radius:12px;background:#f8fcfd;overflow:hidden;">${row('Full name', name)}${row('Phone number', phone)}${row('Email address', email)}${row('City / location', city)}${row('Service required', serviceLabel(service))}${row('Preferred date', date)}</table>
         <div style="margin:0 0 20px;padding:16px 18px;border-left:4px solid #168244;background:#eaf8f1;color:#40586b;font-size:15px;line-height:1.6;"><strong style="display:block;margin-bottom:6px;color:#0b1c3d;">Requirement</strong>${escapeHtml(message).replaceAll('\n', '<br>')}</div>
-        <table role="presentation" cellspacing="0" cellpadding="0"><tr><td style="border-radius:24px;background:#168244;"><a href="https://demo.dhisoft.in/ywc/request-assistance.html" style="display:inline-block;padding:12px 22px;border-radius:24px;color:#fff;font-size:14px;font-weight:800;text-decoration:none;">Open YWC website&nbsp; →</a></td></tr></table>
+        <table role="presentation" cellspacing="0" cellpadding="0"><tr><td style="border-radius:24px;background:#168244;"><a href="https://ywc.care/request-assistance.html" style="display:inline-block;padding:12px 22px;border-radius:24px;color:#fff;font-size:14px;font-weight:800;text-decoration:none;">Open YWC website&nbsp; →</a></td></tr></table>
       </td></tr>
-      <tr><td style="padding:18px 30px;border-top:1px solid #e4eef0;background:#f6fbfd;color:#718392;font-size:12px;line-height:1.55;"><strong style="color:#0b1c3d;">Yes We Care</strong><br>Submitted from <a href="https://demo.dhisoft.in/ywc/" style="color:#168244;text-decoration:none;">demo.dhisoft.in/ywc</a>. Please treat this enquiry as a request for coordination, not a confirmed booking.</td></tr>
+      <tr><td style="padding:18px 30px;border-top:1px solid #e4eef0;background:#f6fbfd;color:#718392;font-size:12px;line-height:1.55;"><strong style="color:#0b1c3d;">Yes We Care</strong><br>Submitted from <a href="https://ywc.care/" style="color:#168244;text-decoration:none;">ywc.care</a>. Please treat this enquiry as a request for coordination, not a confirmed booking.</td></tr>
     </table>
   </div>
 </body></html>`;
