@@ -120,9 +120,9 @@ function applyDocxStaticContent(slug: string, sections: StaticSection[]) {
     if (slug === 'faq' && position === 0) bodyHtml = replaceHeroCopy(bodyHtml, docxP(212), 'hero-copy');
     if (slug === 'faq' && position === 1) { title = 'Frequently Asked Questions'; bodyHtml = docxFaqBody(); }
     if (slug === 'contact' && position === 0) bodyHtml = replaceHeroCopy(bodyHtml, docxP(234), 'hero-copy');
-    if (slug === 'contact' && position === 1) {
+    if (slug === 'contact' && position === 2) {
       const formCard = bodyHtml.match(/(<div class="info-card">\s*<h2>Request Assistance[\s\S]*)$/i)?.[1] || '';
-      bodyHtml = `<div class="container two-cols"><div class="info-card"><h2>${escapeHtml(docxText(233))}</h2>${docxP(234)}<h3>${escapeHtml(docxText(235))}</h3><p>${escapeHtml(docxText(236))}</p><p>${escapeHtml(docxText(237))}</p><p>${escapeHtml(docxText(238)).replace(/, /g, ',<br>')}</p><h3>${escapeHtml(docxText(239))}</h3>${docxP(240)}<h3>${escapeHtml(docxText(241))}</h3>${docxP(242)}${docxP(243)}<a class="btn btn-secondary" href="tel:+919952040006">☎ Call YWC</a></div>${formCard}</div>`;
+      bodyHtml = `<div class="container two-cols"><div class="info-card"><h2>${escapeHtml(docxText(233))}</h2>${docxP(234)}<h3>${escapeHtml(docxText(235))}</h3><p>${escapeHtml(docxText(236))}</p><p>${escapeHtml(docxText(237))}</p><p>${escapeHtml(docxText(238)).replace(/, /g, ',<br>')}</p><h3>${escapeHtml(docxText(239))}</h3>${docxP(240)}<h3>${escapeHtml(docxText(241))}</h3>${docxP(242)}${docxP(243)}<div class="actions contact-actions"><a class="btn btn-primary" href="#enquiry">Request Assistance</a><a class="btn btn-secondary" href="tel:+919952040006">☎ Call Us</a><a class="btn btn-secondary" href="mailto:info@ywc.care?subject=Website%20enquiry%20-%20Yes%20We%20Care">✉ Email Us</a></div></div>${formCard}</div>`;
     }
     return { ...section, title, accentText, bodyHtml };
   });
