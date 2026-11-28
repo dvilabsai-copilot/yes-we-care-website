@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     ['Resources', 'faq.html', 'faq'], ['Contact', 'contact.html', 'contact']
   ];
   const navMarkup = navItems.map(([label, href, key]) => `<a class="${pageKey === key ? 'active' : ''}"${pageKey === key ? ' aria-current="page"' : ''} href="${href}">${label}${key === 'services' ? ' <span aria-hidden="true">⌄</span>' : ''}</a>`).join('');
-  const headerMarkup = `<header class="site-header"><div class="container nav-shell"><a class="brand" href="index.html" aria-label="Yes We Care Home"><img class="brand-logo" src="assets/logo.jpg" alt="Yes We Care"></a><button id="menu-toggle" class="menu-toggle" aria-label="Open navigation" aria-expanded="false"><span class="menu-icon" aria-hidden="true"></span></button><nav id="main-navigation" aria-label="Main navigation">${navMarkup}</nav><div class="header-cta"><a class="phone-pill" href="tel:+919952040006">☎ 99520 40006</a><a class="btn btn-primary" href="request-assistance.html">Request Assistance <span aria-hidden="true">→</span></a></div></div></header>`;
+  const headerMarkup = `<header class="site-header"><div class="container nav-shell"><div class="brand-lockup"><a class="brand" href="index.html" aria-label="Yes We Care Home"><img class="brand-logo" src="assets/logo.jpg" alt="Yes We Care"></a><a class="brand-affiliation" href="https://dvi.travel">A Doview Company</a></div><button id="menu-toggle" class="menu-toggle" aria-label="Open navigation" aria-expanded="false"><span class="menu-icon" aria-hidden="true"></span></button><nav id="main-navigation" aria-label="Main navigation">${navMarkup}</nav><div class="header-cta"><a class="phone-pill" href="tel:+919952040006">☎ 99520 40006</a><a class="btn btn-primary" href="request-assistance.html">Request Assistance <span aria-hidden="true">→</span></a></div></div></header>`;
   const footerMarkup = `<footer class="footer"><div class="container footer-grid"><div class="footer-brand"><a href="index.html"><img class="footer-brand-logo" src="assets/logo.jpg" alt="Yes We Care"></a><p>A caring coordination partner for individuals, families and working professionals with healthcare and care assistance arrangements.</p><div class="social-links" aria-label="Social links"><span>f</span><span>◎</span><span>in</span><span>▶</span></div></div><div><h3>Quick Links</h3><a href="index.html">Home</a><a href="about.html">About Us</a><a href="services.html">Our Services</a><a href="corporate-care.html">Corporate Care</a><a href="volunteer.html">Volunteer</a><a href="faq.html">Resources</a><a href="contact.html">Contact</a></div><div><h3>Our Services</h3><a href="hospital-assistance.html">Hospital Assistance</a><a href="home-care.html">Home Care Assistance</a><a href="elder-care.html">Elder Care Assistance</a><a href="pre-post-operative-care.html">Pre- &amp; Post-Operative Care</a><a href="travel-companion.html">Travel Companion</a><a href="healthcare-concierge.html">Healthcare Concierge</a></div><div><h3>Contact Us</h3><a href="tel:+919952040006">☎ 99520 40006</a><a href="mailto:info@ywc.care?subject=Website%20enquiry%20-%20Yes%20We%20Care">✉ info@ywc.care</a><p>Okkiyam Thoraipakkam, Chennai – 600097, Tamil Nadu, India.</p><p>Mon – Sat, 9:00 AM – 6:00 PM</p></div><div><h3>Our Location</h3><p>No. A4, Chandrasekaran Avenue, Old Mahabalipuram Road, Okkiyam Thoraipakkam, Chennai – 600097, Tamil Nadu, India.</p><div class="map-placeholder" aria-label="YWC location map"><span>YWC Care Support</span></div></div></div><div class="container fineprint"><p>© 2026 Yes We Care Hospital &amp; Home Assist Pvt. Ltd. All rights reserved.</p><div><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms &amp; Conditions</a><a href="https://dhisoft.in">Developed by DHI SOFTWARE</a></div></div><div class="container disclaimer">Service Disclaimer: Services are subject to availability, location, agreed scope and applicable charges unless otherwise agreed. Healthcare coordination and assistance services do not replace professional medical advice, diagnosis or treatment. Clinical services are subject to applicable legal and professional requirements.</div></footer>`;
   document.querySelector('.site-header')?.replaceWith(document.createRange().createContextualFragment(headerMarkup));
   document.querySelector('.footer')?.replaceWith(document.createRange().createContextualFragment(footerMarkup));
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const serviceCard = (href, image, icon, title, copy) => `<a class="service-card service-card-image" href="${href}"><img src="assets/${image}" alt="${title}"><div><span class="service-icon" aria-hidden="true">${icon}</span><h3>${title}</h3><p>${copy}</p><span class="card-link">Know More <span aria-hidden="true">→</span></span></div></a>`;
   const relatedCard = (href, icon, title) => `<a class="related-card" href="${href}"><span class="related-icon" aria-hidden="true">${icon}</span><strong>${title}</strong><span aria-hidden="true">→</span></a>`;
-  const hero = (crumb, title, accent, copy, image, alt) => `<section class="page-hero"><div class="page-hero-inner container"><div class="page-hero-copy"><div class="breadcrumb">Home <span>›</span> ${crumb}</div><h1>${title} <em>${accent}</em></h1><p>${copy}</p><div class="actions"><a class="btn btn-primary" href="request-assistance.html">Request Assistance <span aria-hidden="true">→</span></a><a href="tel:+919952040006" class="btn btn-secondary">☎ Call Us</a></div></div><div class="page-hero-media"><img src="assets/${image}" alt="${alt}" loading="eager"></div></div></section>`;
+  const hero = (crumb, title, accent, copy, image, alt) => `<section class="page-hero"><div class="page-hero-inner container"><div class="page-hero-copy"><div class="breadcrumb">Home <span>›</span> ${crumb}</div><h1>${title} <em>${accent}</em></h1><p>${copy}</p><div class="actions"><a class="btn btn-primary" href="request-assistance.html">Request Assistance <span aria-hidden="true">→</span></a><a href="tel:+919952040006" class="btn btn-secondary">☎ Call Us</a>${pageKey === 'contact' ? '<a href="mailto:info@ywc.care?subject=Website%20enquiry%20-%20Yes%20We%20Care" class="btn btn-secondary">✉ Email Us</a>' : ''}</div></div><div class="page-hero-media"><img src="assets/${image}" alt="${alt}" loading="eager"></div></div></section>`;
   const iconCard = (icon, title, copy) => `<article class="icon-card"><span class="feature-icon" aria-hidden="true">${icon}</span><div><h3>${title}</h3><p>${copy}</p></div></article>`;
   const cta = (title, copy = 'Tell us what support you need and our team will help you explore suitable arrangements.') => `<section class="section cta-band"><div><span class="eyebrow">NEED HELP?</span><h2>${title}</h2><p>${copy}</p></div><div class="actions"><a class="btn btn-primary" href="request-assistance.html">Request Assistance <span aria-hidden="true">→</span></a><a href="tel:+919952040006" class="btn btn-secondary">☎ Call Us</a></div></section>`;
 
@@ -252,6 +252,27 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   await applyCmsPageContent();
 
+  if (pageKey === 'contact') {
+    const heroActions = document.querySelector('.page-hero .actions');
+    if (heroActions && !heroActions.querySelector('a[href^="mailto:"]')) {
+      const emailAction = document.createElement('a');
+      emailAction.className = 'btn btn-secondary';
+      emailAction.href = 'mailto:info@ywc.care?subject=Website%20enquiry%20-%20Yes%20We%20Care';
+      emailAction.textContent = '✉ Email Us';
+      heroActions.append(emailAction);
+    }
+  }
+
+  const enquirySubmitButton = document.querySelector('#enquiry-form button[type="submit"]');
+  if (enquirySubmitButton) {
+    enquirySubmitButton.textContent = 'Submit Enquiry →';
+    const demoNotice = [...enquirySubmitButton.form.querySelectorAll('.form-notice')]
+      .find(notice => /static website does not send or store/i.test(notice.textContent || ''));
+    if (demoNotice) {
+      demoNotice.textContent = 'Your enquiry will be sent securely to our care coordination team. An enquiry is not a confirmed booking; service confirmation depends on scope, charges and availability.';
+    }
+  }
+
   const setImageSource = (img, source) => {
     if (!img || !source || img.getAttribute('src') === source) return;
     img.style.visibility = 'hidden';
@@ -394,6 +415,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (select && service && [...select.options].some(option => option.value === service)) select.value = service;
   const form = document.getElementById('enquiry-form');
   const preferredDateInput = form?.querySelector('input[name="date"]');
+  if (preferredDateInput) {
+    preferredDateInput.required = true;
+    const dateLabel = preferredDateInput.closest('label');
+    if (dateLabel?.firstChild?.nodeType === Node.TEXT_NODE) {
+      dateLabel.firstChild.textContent = dateLabel.firstChild.textContent.replace(/\s*\(optional\)/i, ' *');
+    }
+  }
   const minimumPreferredDate = () => {
     const parts = new Intl.DateTimeFormat('en-CA', {
       timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit'
