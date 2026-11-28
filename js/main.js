@@ -357,7 +357,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       ['.about-support-grid article:nth-child(2) img', 'assets/ywc-home-care.png'],
       ['.about-support-grid article:nth-child(3) img', 'assets/ywc-postoperative-care.png'],
       ['.about-support-grid article:nth-child(4) img', 'assets/ywc-request-consultation.png'],
-      ['.about-support-grid article:nth-child(5) img', 'assets/ywc-corporate-support.png'],
       ['.about-cta-photo img', 'assets/ywc-travel-companion.png']
     ];
     aboutImages.forEach(([selector, source]) => {
