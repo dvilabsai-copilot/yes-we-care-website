@@ -234,3 +234,105 @@ img[src$="care-family.jpg"],img[src$="care-at-home.jpg"],img[src$="corporate-tea
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 700px) {
+  /* Use the photo proportions when the hero switches to a single column. */
+  .inner-page :is(.hero-media, .page-hero-media),
+  .about-page .about-hero-media {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    max-height: 360px;
+    aspect-ratio: 3 / 2;
+  }
+  .inner-page .page-hero-media,
+  .about-page .about-hero-media {
+    border-top-left-radius: clamp(52px, 16vw, 88px);
+    border-bottom-left-radius: clamp(42px, 14vw, 72px);
+  }
+  .inner-page :is(.hero-media, .page-hero-media) > img,
+  .about-page .about-hero-media > img {
+    display: block;
+    object-position: center 40%;
+  }
+
+  .homepage .hero-media {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 16 / 10;
+  }
+  .homepage .hero-media > img {
+    display: block;
+  }
+  .homepage .home-why .split {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .homepage .home-why h2 {
+    white-space: normal;
+  }
+  .homepage .home-why .why-visual,
+  .homepage .home-why .why-visual .rounded-image {
+    width: 100%;
+    height: auto;
+    min-height: 0;
+  }
+  .homepage .why-visual .rounded-image {
+    display: block;
+    aspect-ratio: 1896 / 830;
+  }
+  .homepage .why-visual blockquote {
+    position: static;
+    width: auto;
+    min-height: 0;
+    margin-top: 8px;
+    padding: 16px;
+    font-size: .875rem;
+  }
+  .homepage .home-services .card-grid .service-card .service-thumb {
+    height: 56px;
+    object-position: center 40%;
+  }
+  .homepage .home-corporate .corporate-photo {
+    height: auto;
+    aspect-ratio: 1891 / 831;
+  }
+  .homepage .home-corporate .corporate-photo img {
+    display: block;
+    width: 100%;
+    object-position: center;
+  }
+
+  .about-page .about-photo,
+  .about-page .about-cta-photo {
+    height: auto;
+    max-height: 280px;
+  }
+  .about-page .about-photo {
+    aspect-ratio: 16 / 10;
+  }
+  .about-page .about-cta-photo {
+    aspect-ratio: 16 / 9;
+  }
+  .about-page :is(.about-photo, .about-cta-photo) > img {
+    display: block;
+    object-position: center 40%;
+    transform: none;
+  }
+}
+
+@media (max-width: 360px) {
+  .homepage .home-services .card-grid .service-card {
+    grid-template-columns: 44px minmax(0, 1fr);
+    gap: 6px;
+  }
+  .homepage .home-services .card-grid .service-card .service-thumb {
+    width: 44px;
+    height: 35px;
+  }
+  .homepage .home-services .service-card .card-link {
+    display: none;
+  }
+  .homepage .home-services .service-card h3 {
+    overflow-wrap: anywhere;
+  }
+}
