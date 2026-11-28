@@ -335,25 +335,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
-  async function copyEmailAddress(address) {
+  async function copyContactValue(value) {
     try {
       if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(address);
+        await navigator.clipboard.writeText(value);
         return true;
       }
     } catch { /* Try copying from a selection when clipboard access is restricted. */ }
 
     const previousFocus = document.activeElement;
     const field = document.createElement('textarea');
-    field.className = 'email-copy-buffer';
-    field.value = address;
+    field.className = 'contact-copy-buffer';
+    field.value = value;
     field.readOnly = true;
     field.tabIndex = -1;
     document.body.append(field);
     try {
       field.focus({ preventScroll: true });
       field.select();
-      field.setSelectionRange(0, address.length);
+      field.setSelectionRange(0, value.length);
       return document.execCommand('copy');
     } catch {
       return false;
@@ -363,29 +363,30 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  const emailLinks = document.querySelectorAll('a[href^="mailto:"]');
-  if (emailLinks.length) {
+  const contactLinks = document.querySelectorAll('a[href^="mailto:"], a[href^="tel:"]');
+  if (contactLinks.length) {
     const toast = document.createElement('div');
-    toast.className = 'email-copy-toast';
+    toast.className = 'contact-copy-toast';
     toast.setAttribute('role', 'status');
     toast.setAttribute('aria-atomic', 'true');
     document.body.append(toast);
     let dismissToast;
 
-    emailLinks.forEach(link => link.addEventListener('click', async event => {
+    contactLinks.forEach(link => link.addEventListener('click', async event => {
       if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
       const href = link.getAttribute('href');
-      let address;
+      let value;
       try {
-        address = decodeURIComponent(new URL(href).pathname);
+        value = decodeURIComponent(new URL(href).pathname);
       } catch {
         return;
       }
-      if (!address) return;
+      if (!value) return;
 
       event.preventDefault();
-      const copied = await copyEmailAddress(address);
-      toast.textContent = copied ? 'Email address copied' : 'Could not copy the email address';
+      const copied = await copyContactValue(value);
+      const label = href.startsWith('tel:') ? 'Phone number' : 'Email address';
+      toast.textContent = copied ? `${label} copied` : `Could not copy the ${label.toLowerCase()}`;
       toast.classList.toggle('is-copy-error', !copied);
       toast.classList.add('is-visible');
       clearTimeout(dismissToast);
