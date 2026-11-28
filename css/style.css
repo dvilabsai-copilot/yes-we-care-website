@@ -374,6 +374,11 @@ img[src$="care-family.jpg"],img[src$="care-at-home.jpg"],img[src$="corporate-tea
   }
 }
 
+main details p a[href^="mailto:"] {
+  text-decoration: underline;
+  text-underline-offset: .15em;
+}
+
 @media (max-width: 360px) {
   .homepage .home-services .card-grid .service-card {
     grid-template-columns: 44px minmax(0, 1fr);
