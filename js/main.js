@@ -349,21 +349,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (homeServiceImages[index]) setImageSource(img, homeServiceImages[index]);
     });
   }
-  if (pageKey === 'about') {
-    const aboutImages = [
-      ['.about-hero-media img', 'assets/ywc-hero-family.png'],
-      ['.about-photo img', 'assets/ywc-elder-care.png'],
-      ['.about-support-grid article:nth-child(1) img', 'assets/ywc-hospital-support.png'],
-      ['.about-support-grid article:nth-child(2) img', 'assets/ywc-home-care.png'],
-      ['.about-support-grid article:nth-child(3) img', 'assets/ywc-postoperative-care.png'],
-      ['.about-support-grid article:nth-child(4) img', 'assets/ywc-request-consultation.png'],
-      ['.about-cta-photo img', 'assets/ywc-travel-companion.png']
-    ];
-    aboutImages.forEach(([selector, source]) => {
-      const img = document.querySelector(selector);
-      if (img) setImageSource(img, source);
-    });
-  }
   if (pageKey === 'index') {
     document.querySelector('.hero-copy > .eyebrow')?.remove();
     const footerLogoImage = document.querySelector('.footer-brand-logo');
