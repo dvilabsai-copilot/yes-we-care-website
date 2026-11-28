@@ -1,13 +1,15 @@
 import { BadRequestException, Body, Controller, HttpCode, Post } from '@nestjs/common';
-import { IsBoolean, IsDateString, IsEmail, IsOptional, IsString, Length, Matches } from 'class-validator';
+import { IsBoolean, IsDateString, IsEmail, IsIn, IsOptional, IsString, Length, Matches } from 'class-validator';
 import { EmailService } from './email.service';
 import { PrismaService } from './prisma.service';
+
+const supportedCities = ['Chennai', 'Hyderabad', 'Bengaluru', 'Cochin'];
 
 export class EnquiryDto {
   @IsString() @Length(2, 120) name!: string;
   @IsString() @Matches(/^[0-9+ ()-]{10,20}$/) phone!: string;
   @IsOptional() @IsEmail() email?: string;
-  @IsString() @Length(2, 120) city!: string;
+  @IsIn(supportedCities) city!: string;
   @IsString() @Length(2, 120) service!: string;
   @IsDateString() @Matches(/^\d{4}-\d{2}-\d{2}$/) preferredDate!: string;
   @IsString() @Length(10, 2000) message!: string;

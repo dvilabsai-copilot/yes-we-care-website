@@ -81,7 +81,7 @@
 </div>
 <div class="info-card">
 <h2>Request Assistance</h2>
-<p>Explore how the enquiry experience would work on the live website.</p>
+<p>Tell us what assistance you need. Our care coordination team will get in touch.</p>
 <form id="enquiry-form" class="enquiry-form" novalidate>
 <div class="form-grid">
 <label>Full Name *<input name="name" required minlength="2" placeholder="Your full name" autocomplete="name">
@@ -90,7 +90,13 @@
 </label>
 <label>Email (optional)<input name="email" type="email" placeholder="you@example.com" autocomplete="email">
 </label>
-<label>City / Locality *<input name="city" required placeholder="Where is help needed?">
+<label>City / Location *<select name="city" required>
+<option value="">Choose a city</option>
+<option value="Chennai">Chennai</option>
+<option value="Hyderabad">Hyderabad</option>
+<option value="Bengaluru">Bengaluru</option>
+<option value="Cochin">Cochin</option>
+</select>
 </label>
 <label>Service Required *<select name="service" required>
 <option value="">Choose a service</option>
@@ -107,7 +113,7 @@
 </label>
 </div>
 <p class="form-notice date-notice">Please choose a date at least seven days from today. For same-day or immediate assistance, call <a href="tel:+919952040006">99520 40006</a>.</p>
-<label>Briefly describe the assistance *<textarea name="message" required minlength="10" rows="5" placeholder="Please avoid entering sensitive medical details into this demo form.">
+<label>Briefly describe the assistance *<textarea name="message" required minlength="10" rows="5" placeholder="Tell us what support you need. Please leave out sensitive medical details.">
 </textarea>
 </label>
 <label class="consent">
@@ -164,7 +170,7 @@
 </div>
 <div class="container disclaimer">Service Disclaimer: Services are subject to availability, location, agreed scope and applicable charges unless otherwise agreed. Healthcare coordination and assistance services do not replace professional medical advice, diagnosis or treatment. Clinical services are subject to applicable legal and professional requirements.</div>
 </footer>
-<script src="js/main.js?v=20261128-email-copy-toast" defer>
+<script src="js/main.js?v=20261128-enquiry-cities" defer>
 </script>
 </body>
 </html>
