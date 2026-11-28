@@ -307,6 +307,65 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
+  async function copyEmailAddress(address) {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(address);
+        return true;
+      }
+    } catch { /* Try copying from a selection when clipboard access is restricted. */ }
+
+    const previousFocus = document.activeElement;
+    const field = document.createElement('textarea');
+    field.className = 'email-copy-buffer';
+    field.value = address;
+    field.readOnly = true;
+    field.tabIndex = -1;
+    document.body.append(field);
+    try {
+      field.focus({ preventScroll: true });
+      field.select();
+      field.setSelectionRange(0, address.length);
+      return document.execCommand('copy');
+    } catch {
+      return false;
+    } finally {
+      field.remove();
+      if (previousFocus instanceof HTMLElement) previousFocus.focus({ preventScroll: true });
+    }
+  }
+
+  const emailLinks = document.querySelectorAll('a[href^="mailto:"]');
+  if (emailLinks.length) {
+    const toast = document.createElement('div');
+    toast.className = 'email-copy-toast';
+    toast.setAttribute('role', 'status');
+    toast.setAttribute('aria-atomic', 'true');
+    document.body.append(toast);
+    let dismissToast;
+
+    emailLinks.forEach(link => link.addEventListener('click', async event => {
+      if (event.defaultPrevented || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      const href = link.getAttribute('href');
+      let address;
+      try {
+        address = decodeURIComponent(new URL(href).pathname);
+      } catch {
+        return;
+      }
+      if (!address) return;
+
+      event.preventDefault();
+      const copied = await copyEmailAddress(address);
+      toast.textContent = copied ? 'Email address copied' : 'Could not copy the email address';
+      toast.classList.toggle('is-copy-error', !copied);
+      toast.classList.add('is-visible');
+      clearTimeout(dismissToast);
+      dismissToast = setTimeout(() => toast.classList.remove('is-visible'), 3200);
+      window.location.href = href;
+    }));
+  }
+
   const enquirySubmitButton = document.querySelector('#enquiry-form button[type="submit"]');
   if (enquirySubmitButton) {
     enquirySubmitButton.textContent = 'Submit Enquiry →';
