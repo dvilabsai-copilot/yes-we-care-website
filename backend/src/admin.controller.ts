@@ -1,7 +1,17 @@
 import { Body, Controller, Delete, Get, Param, Patch, UseGuards } from '@nestjs/common';
+import { Transform } from 'class-transformer';
+import { IsEmail, MaxLength } from 'class-validator';
 import sanitizeHtml from 'sanitize-html';
 import { AdminAuthGuard } from './auth';
+import { ENQUIRY_RECIPIENT_KEY, getEnquiryRecipient } from './enquiry-recipient';
 import { PrismaService } from './prisma.service';
+
+export class UpdateGlobalSettingsDto {
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
+  @IsEmail()
+  @MaxLength(254)
+  enquiryRecipientEmail!: string;
+}
 
 const contentHtmlOptions: sanitizeHtml.IOptions = {
   allowedTags: [...sanitizeHtml.defaults.allowedTags, 'img', 'form', 'label', 'input', 'select', 'option', 'textarea', 'button', 'details', 'summary'],
@@ -73,4 +83,19 @@ export class AdminController {
 
   @Get('enquiries')
   enquiries() { return this.prisma.enquiry.findMany({ orderBy: { createdAt: 'desc' }, take: 100 }); }
+
+  @Get('settings')
+  async settings() {
+    return { enquiryRecipientEmail: await getEnquiryRecipient(this.prisma) };
+  }
+
+  @Patch('settings')
+  async updateSettings(@Body() { enquiryRecipientEmail }: UpdateGlobalSettingsDto) {
+    const saved = await this.prisma.siteSetting.upsert({
+      where: { key: ENQUIRY_RECIPIENT_KEY },
+      update: { value: enquiryRecipientEmail },
+      create: { key: ENQUIRY_RECIPIENT_KEY, value: enquiryRecipientEmail },
+    });
+    return { enquiryRecipientEmail: saved.value };
+  }
 }

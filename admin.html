@@ -17,14 +17,108 @@
 </head>
 <body>
 <section id="login" class="login-wrap"><div class="login-card"><div class="brand-lockup"><div class="brand-mark">YWC</div><div><strong>YWC CARE CMS</strong><small>CARE BEYOND JUST TREATMENT</small></div></div><h1>Welcome back</h1><p>Manage the DOCX-aligned content that powers the Yes We Care experience.</p><form id="login-form"><div class="field"><label>Email<input id="email" type="email" value="admin@ywc.com" required></label></div><div class="field"><label>Password<input id="password" type="password" value="admin123" required></label></div><button class="btn full">Sign in to CMS →</button></form><p id="login-feedback"></p></div></section>
-<div id="cms-app" class="app hidden"><aside class="sidebar"><div class="brand"><div class="brand-mark">YWC</div><div><h2>YWC</h2><small>CARE CONTENT STUDIO</small></div></div><div class="side-label">WORKSPACE</div><nav class="nav" aria-label="CMS navigation"><button class="active" data-nav="content"><span class="nav-icon">◫</span><span>Content</span><small id="nav-page-count">10</small></button><button data-nav="services"><span class="nav-icon">✦</span><span>Services</span><small>6</small></button><button data-nav="faqs"><span class="nav-icon">?</span><span>FAQs</span><small>10</small></button><button data-nav="enquiries"><span class="nav-icon">▤</span><span>Enquiries</span><small id="nav-enquiry-count">—</small></button></nav><div class="side-spacer"></div><div class="side-promo"><div class="orb">✧</div><strong>Care content at a glance.</strong><p>Keep every section clear, compassionate, and aligned with the approved YWC content source.</p></div><div class="side-user"><div class="avatar">A</div><div><strong>Administrator</strong><small>YWC content manager</small></div></div></aside><div class="main"><header class="topbar"><div class="crumb"><span>YWC Care CMS</span><span>/</span><strong id="crumb-title">Content</strong></div><div class="top-actions"><span class="top-date">DOCX content workspace</span><span class="role">Admin access</span><button id="logout" class="btn light">Sign out ↗</button></div></header><main class="content"><div class="ribbon">✦ <span><b>Content management workspace</b> · Changes are saved to PostgreSQL and can be reviewed before publishing.</span></div><section class="welcome"><div class="welcome-copy"><span class="eyebrow">YES WE CARE · ADMIN WORKSPACE</span><h1>Shape every care story with confidence.</h1><p>Edit page sections, refine WYSIWYG content, and keep the public experience aligned with the approved YWC content system.</p></div></section><div class="section-row"><div><span class="eyebrow">AT A GLANCE</span><h2>Content overview</h2></div><button class="section-action" id="refresh">↻ Refresh data</button></div><div class="metrics"><div class="metric"><div class="metric-icon">◫</div><div id="page-count" class="metric-value">—</div><b>Published pages</b><small>DOCX-aligned page records</small></div><div class="metric"><div class="metric-icon">✦</div><div class="metric-value">6</div><b>Services</b><small>Care coordination offerings</small></div><div class="metric"><div class="metric-icon">?</div><div class="metric-value">10</div><b>FAQs</b><small>Support questions and answers</small></div><div class="metric"><div class="metric-icon">▤</div><div id="enquiry-count" class="metric-value">—</div><b>Enquiries</b><small>Latest website requests</small></div></div><section class="panel password-panel"><div class="panel-head"><div><span class="eyebrow">ACCOUNT SECURITY</span><h2>Change your password</h2><p>Use a new password of at least 8 characters.</p></div></div><form id="password-form" class="password-form"><div class="field"><span>Current password</span><input id="current-password" type="password" minlength="1" required></div><div class="field"><span>New password</span><input id="new-password" type="password" minlength="8" required></div><div class="field"><span>Confirm new password</span><input id="confirm-password" type="password" minlength="8" required></div><button class="btn" type="submit">Update password</button><p id="password-feedback" class="password-feedback"></p></form></section><div class="workspace" id="content-view"><section class="panel"><div class="panel-head"><div><span class="eyebrow">CONTENT LIBRARY</span><h2>Pages</h2><p>Choose a page to edit its seeded content.</p></div></div><div id="pages" class="pages"></div></section><section id="editor" class="panel"><div class="empty-state"><div class="empty-icon">✧</div><div><strong>Select a page to begin</strong><span>Choose a page from the content library to edit its sections.</span></div></div></section></div><section id="enquiries-view" class="panel hidden-view"><div class="panel-head"><div><span class="eyebrow">INBOX</span><h2>Recent enquiries</h2><p>Website enquiries stored by the YWC API.</p></div></div><div id="enquiries-table" class="table-wrap"></div></section></main></div></div>
+<div id="cms-app" class="app hidden"><aside class="sidebar"><div class="brand"><div class="brand-mark">YWC</div><div><h2>YWC</h2><small>CARE CONTENT STUDIO</small></div></div><div class="side-label">WORKSPACE</div><nav class="nav" aria-label="CMS navigation"><button class="active" data-nav="content"><span class="nav-icon">◫</span><span>Content</span><small id="nav-page-count">10</small></button><button data-nav="services"><span class="nav-icon">✦</span><span>Services</span><small>6</small></button><button data-nav="faqs"><span class="nav-icon">?</span><span>FAQs</span><small>10</small></button><button data-nav="enquiries"><span class="nav-icon">▤</span><span>Enquiries</span><small id="nav-enquiry-count">—</small></button>
+<button data-nav="settings"><span class="nav-icon" aria-hidden="true">⚙</span><span>Global Settings</span></button>
+</nav><div class="side-spacer"></div><div class="side-promo"><div class="orb">✧</div><strong>Care content at a glance.</strong><p>Keep every section clear, compassionate, and aligned with the approved YWC content source.</p></div><div class="side-user"><div class="avatar">A</div><div><strong>Administrator</strong><small>YWC content manager</small></div></div></aside><div class="main"><header class="topbar"><div class="crumb"><span>YWC Care CMS</span><span>/</span><strong id="crumb-title">Content</strong></div><div class="top-actions"><span class="top-date">DOCX content workspace</span><span class="role">Admin access</span><button id="logout" class="btn light">Sign out ↗</button></div></header><main class="content"><div id="workspace-overview"><div class="ribbon">✦ <span><b>Content management workspace</b> · Changes are saved to PostgreSQL and can be reviewed before publishing.</span></div><section class="welcome"><div class="welcome-copy"><span class="eyebrow">YES WE CARE · ADMIN WORKSPACE</span><h1>Shape every care story with confidence.</h1><p>Edit page sections, refine WYSIWYG content, and keep the public experience aligned with the approved YWC content system.</p></div></section><div class="section-row"><div><span class="eyebrow">AT A GLANCE</span><h2>Content overview</h2></div><button class="section-action" id="refresh">↻ Refresh data</button></div><div class="metrics"><div class="metric"><div class="metric-icon">◫</div><div id="page-count" class="metric-value">—</div><b>Published pages</b><small>DOCX-aligned page records</small></div><div class="metric"><div class="metric-icon">✦</div><div class="metric-value">6</div><b>Services</b><small>Care coordination offerings</small></div><div class="metric"><div class="metric-icon">?</div><div class="metric-value">10</div><b>FAQs</b><small>Support questions and answers</small></div><div class="metric"><div class="metric-icon">▤</div><div id="enquiry-count" class="metric-value">—</div><b>Enquiries</b><small>Latest website requests</small></div></div><section class="panel password-panel"><div class="panel-head"><div><span class="eyebrow">ACCOUNT SECURITY</span><h2>Change your password</h2><p>Use a new password of at least 8 characters.</p></div></div><form id="password-form" class="password-form"><div class="field"><span>Current password</span><input id="current-password" type="password" minlength="1" required></div><div class="field"><span>New password</span><input id="new-password" type="password" minlength="8" required></div><div class="field"><span>Confirm new password</span><input id="confirm-password" type="password" minlength="8" required></div><button class="btn" type="submit">Update password</button><p id="password-feedback" class="password-feedback"></p></form></section></div><div class="workspace" id="content-view"><section class="panel"><div class="panel-head"><div><span class="eyebrow">CONTENT LIBRARY</span><h2>Pages</h2><p>Choose a page to edit its seeded content.</p></div></div><div id="pages" class="pages"></div></section><section id="editor" class="panel"><div class="empty-state"><div class="empty-icon">✧</div><div><strong>Select a page to begin</strong><span>Choose a page from the content library to edit its sections.</span></div></div></section></div><section id="enquiries-view" class="panel hidden-view"><div class="panel-head"><div><span class="eyebrow">INBOX</span><h2>Recent enquiries</h2><p>Website enquiries stored by the YWC API.</p></div></div><div id="enquiries-table" class="table-wrap"></div></section>
+<section id="settings-view" class="panel hidden-view">
+  <div class="panel-head">
+    <div><h2>Global Settings</h2><p>Manage where website enquiry notifications are sent.</p></div>
+  </div>
+  <form id="settings-form" style="max-width: 34rem">
+    <div class="field">
+      <label for="enquiry-recipient">Enquiry recipient email</label>
+      <input type="email" id="enquiry-recipient" name="enquiryRecipientEmail" required maxlength="254" aria-describedby="recipient-help" disabled>
+      <small id="recipient-help">New form submissions will be sent to this inbox.</small>
+    </div>
+    <div class="save-row">
+      <button class="btn" type="submit" disabled>Save settings</button>
+      <span id="settings-feedback" role="status"></span>
+    </div>
+  </form>
+</section></main></div></div>
 <script>
 let token='';let selectedPage='';const API_PREFIX=location.pathname.startsWith('/ywc/')?'/ywc':'';const $=s=>document.querySelector(s);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 async function api(path,options={}){const response=await fetch(`${API_PREFIX}${path}`,{...options,headers:{'Content-Type':'application/json',...(token?{Authorization:`Bearer ${token}`}:{}) ,...(options.headers||{})}});if(!response.ok)throw new Error((await response.text())||String(response.status));return response.json()}
-function setView(view,title){$('#content-view').classList.toggle('hidden-view',view!=='content');$('#enquiries-view').classList.toggle('hidden-view',view!=='enquiries');$('#crumb-title').textContent=title;document.querySelectorAll('.nav button').forEach(button=>button.classList.toggle('active',button.dataset.nav===view));}
+function setView(view, title) {
+  for (const name of ['content', 'enquiries', 'settings']) {
+    document.getElementById(name + '-view').classList.toggle('hidden-view', name !== view);
+  }
+  $('#workspace-overview').classList.toggle('hidden-view', view === 'settings');
+  $('#crumb-title').textContent = title;
+  document.querySelectorAll('.nav button').forEach(button => {
+    button.classList.toggle('active', button.dataset.nav === view);
+  });
+}
 $('#login-form').addEventListener('submit',async event=>{event.preventDefault();try{const response=await fetch(`${API_PREFIX}/api/admin/auth/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:$('#email').value,password:$('#password').value})});if(!response.ok)throw new Error('Invalid credentials');const data=await response.json();token=data.accessToken;$('#login').classList.add('hidden');$('#cms-app').classList.remove('hidden');await loadPages();await loadEnquiries();}catch(error){$('#login-feedback').className='error';$('#login-feedback').textContent=error.message;}});
 $('#logout').onclick=()=>{token='';$('#cms-app').classList.add('hidden');$('#login').classList.remove('hidden');$('#password-form').reset();};$('#refresh').onclick=async()=>{await loadPages();await loadEnquiries();};
-document.querySelectorAll('.nav button').forEach(button=>button.onclick=async()=>{if(button.dataset.nav==='enquiries'){setView('enquiries','Enquiries');await loadEnquiries();}else{setView('content','Content');}});
+document.querySelectorAll('.nav button').forEach(button => {
+  button.onclick = async () => {
+    switch (button.dataset.nav) {
+      case 'settings':
+        setView('settings', 'Global Settings');
+        await loadSettings();
+        break;
+      case 'enquiries':
+        setView('enquiries', 'Enquiries');
+        await loadEnquiries();
+        break;
+      default:
+        setView('content', 'Content');
+    }
+  };
+});
+
+const settingsForm = $('#settings-form');
+const recipientInput = $('#enquiry-recipient');
+const settingsSubmit = settingsForm.querySelector('button[type="submit"]');
+const settingsFeedback = $('#settings-feedback');
+let settingsBusy = false;
+
+function setSettingsBusy(busy) {
+  settingsBusy = busy;
+  recipientInput.disabled = busy;
+  settingsSubmit.disabled = busy;
+}
+
+async function loadSettings() {
+  if (settingsBusy) return;
+  setSettingsBusy(true);
+  settingsFeedback.className = 'muted';
+  settingsFeedback.textContent = 'Loading settings…';
+  try {
+    const settings = await api('/api/admin/settings');
+    recipientInput.value = settings.enquiryRecipientEmail;
+    settingsFeedback.textContent = '';
+    setSettingsBusy(false);
+  } catch {
+    settingsFeedback.className = 'error';
+    settingsFeedback.textContent = 'Could not load settings. Select Global Settings to try again.';
+    settingsBusy = false;
+  }
+}
+
+settingsForm.addEventListener('submit', async event => {
+  event.preventDefault();
+  if (settingsBusy || recipientInput.disabled) return;
+  const enquiryRecipientEmail = recipientInput.value.trim();
+  setSettingsBusy(true);
+  settingsFeedback.className = 'muted';
+  settingsFeedback.textContent = 'Saving…';
+  try {
+    const settings = await api('/api/admin/settings', {
+      method: 'PATCH',
+      body: JSON.stringify({ enquiryRecipientEmail })
+    });
+    recipientInput.value = settings.enquiryRecipientEmail;
+    settingsFeedback.className = 'save-note';
+    settingsFeedback.textContent = 'Settings saved.';
+  } catch {
+    settingsFeedback.className = 'error';
+    settingsFeedback.textContent = 'Could not save settings. Check the email address and try again.';
+  } finally {
+    setSettingsBusy(false);
+  }
+});
 async function loadPages(){const pageList=await api('/api/admin/pages');$('#page-count').textContent=pageList.length;$('#nav-page-count').textContent=pageList.length;$('#pages').innerHTML=pageList.map(page=>`<button class="page-button ${selectedPage===page.id?'active':''}" data-id="${page.id}">${esc(page.title)}<small>${esc(page.slug)} · ${page._count.sections} sections</small></button>`).join('');document.querySelectorAll('.page-button').forEach(button=>button.onclick=()=>loadPage(button.dataset.id));}
 async function loadPage(id){selectedPage=id;setView('content','Content');const page=await api(`/api/admin/pages/${id}`);await loadPages();$('#editor').innerHTML=`<div class="editor-header"><div><span class="eyebrow">EDIT PAGE</span><h2>${esc(page.title)}</h2><p>${esc(page.slug)} · ${page.sections.length} editable sections</p></div><span class="status">Published</span></div>${page.sections.map(section=>`<article class="editor-section" data-id="${section.id}"><h3>${esc(section.title||section.sectionKey)}</h3><div class="editor-grid"><div class="field"><span>Eyebrow</span><input data-field="eyebrow" value="${esc(section.eyebrow||'')}"></div><div class="field"><span>Title</span><input data-field="title" value="${esc(section.title||'')}"></div></div><div class="field"><span>Body content</span><div class="toolbar"><button type="button" data-cmd="bold"><b>B</b></button><button type="button" data-cmd="italic"><i>I</i></button><button type="button" data-cmd="insertUnorderedList">• List</button></div><div class="editor" contenteditable="true" data-field="bodyHtml">${section.bodyHtml||''}</div></div><div class="save-row"><button class="btn save" type="button">Save section</button><span class="save-note"></span></div></article>`).join('')}`;document.querySelectorAll('[data-cmd]').forEach(button=>button.onclick=()=>document.execCommand(button.dataset.cmd,false,null));document.querySelectorAll('.save').forEach(button=>button.onclick=saveSection);}
 async function saveSection(event){const section=event.target.closest('.editor-section');const body={};section.querySelectorAll('[data-field]').forEach(element=>body[element.dataset.field]=element.dataset.field==='bodyHtml'?element.innerHTML:element.value);try{await api(`/api/admin/sections/${section.dataset.id}`,{method:'PATCH',body:JSON.stringify(body)});section.querySelector('.save-note').textContent='Saved to PostgreSQL';setTimeout(()=>section.querySelector('.save-note').textContent='',2200);}catch(error){section.querySelector('.save-note').textContent='Save failed';}}

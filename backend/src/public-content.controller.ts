@@ -1,4 +1,5 @@
 import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
+import { ENQUIRY_RECIPIENT_KEY } from './enquiry-recipient';
 import { PrismaService } from './prisma.service';
 
 @Controller('api/public')
@@ -26,5 +27,8 @@ export class PublicContentController {
   faqs() { return this.prisma.faq.findMany({ where: { isVisible: true }, orderBy: { position: 'asc' } }); }
 
   @Get('settings')
-  async settings() { const rows = await this.prisma.siteSetting.findMany(); return Object.fromEntries(rows.map(row => [row.key, row.value])); }
+  async settings() {
+    const rows = await this.prisma.siteSetting.findMany({ where: { key: { not: ENQUIRY_RECIPIENT_KEY } } });
+    return Object.fromEntries(rows.map(row => [row.key, row.value]));
+  }
 }

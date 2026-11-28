@@ -135,3 +135,43 @@ a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,
 img[src$="care-family.jpg"],img[src$="care-at-home.jpg"],img[src$="corporate-team.jpg"]{visibility:hidden}
 
 .contact-option{color:inherit;text-decoration:none;transition:transform .18s ease,box-shadow .18s ease}.contact-option:hover,.contact-option:focus-visible{color:inherit;text-decoration:none;transform:translateY(-2px);box-shadow:0 12px 28px #0b27481a}.contact-option:focus-visible{outline:3px solid #4cbd5a;outline-offset:3px}.date-notice{margin:0 0 12px}.date-notice a{color:var(--green);font-weight:750}
+
+.about-page .service-locations {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.45fr);
+  align-items: center;
+  gap: 20px 36px;
+  margin-block: 20px;
+  padding: clamp(20px, 3vw, 36px);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  background: var(--pale);
+}
+.service-locations h2 {
+  margin: 0 0 6px;
+  font-size: clamp(24px, 2vw, 32px);
+  line-height: 1.15;
+}
+.service-locations p {
+  margin: 0;
+  color: var(--muted);
+}
+.service-locations ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 20px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.service-locations li {
+  border-bottom: 1px solid #c5dfd2;
+  padding-block: 8px;
+  color: var(--green);
+  font-weight: 700;
+}
+@media (max-width: 760px) {
+  .about-page .service-locations {
+    grid-template-columns: 1fr;
+  }
+}

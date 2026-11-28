@@ -1,5 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
+import { getEnquiryRecipient } from './enquiry-recipient';
+import { PrismaService } from './prisma.service';
 
 export type EnquiryMail = { name: string; phone: string; email?: string; city: string; service: string; preferredDate?: string; message: string };
 
@@ -8,6 +10,8 @@ const escapeHtml = (value: string) => value.replace(/[&<>'"]/g, character => ({ 
 @Injectable()
 export class EmailService {
   private readonly logger = new Logger(EmailService.name);
+
+  constructor(private readonly prisma: PrismaService) {}
 
   private transporter() {
     return nodemailer.createTransport({ host: process.env.SMTP_HOST, port: Number(process.env.SMTP_PORT || 587), secure: String(process.env.SMTP_SECURE).toLowerCase() === 'true', auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD } });
@@ -19,10 +23,11 @@ export class EmailService {
   }
 
   async sendEnquiry(mail: EnquiryMail) {
-    const text = ['New YWC website enquiry', '', `Name: ${mail.name}`, `Phone: ${mail.phone}`, `Email: ${mail.email || 'Not provided'}`, `City / Location: ${mail.city}`, `Service: ${mail.service}`, `Preferred date: ${mail.preferredDate || 'Not specified'}`, '', 'Requirement:', mail.message].join('\n');
-    const payload = { from: `${process.env.SMTP_FROM_NAME || 'Yes We Care'} <${process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER}>`, to: process.env.ENQUIRY_TO_EMAIL || 'info@ywc.care', replyTo: mail.email || undefined, subject: `YWC enquiry - ${mail.service}`, text, html: this.html(mail) };
     if (String(process.env.MAIL_DRY_RUN).toLowerCase() === 'true') { this.logger.log(`MAIL_DRY_RUN enquiry for ${mail.name}`); return { messageId: 'dry-run' }; }
-    if (!payload.to || !process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASSWORD) throw new Error('Email configuration is incomplete');
+    if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASSWORD) throw new Error('Email configuration is incomplete');
+    const recipient = await getEnquiryRecipient(this.prisma);
+    const text = ['New YWC website enquiry', '', `Name: ${mail.name}`, `Phone: ${mail.phone}`, `Email: ${mail.email || 'Not provided'}`, `City / Location: ${mail.city}`, `Service: ${mail.service}`, `Preferred date: ${mail.preferredDate || 'Not specified'}`, '', 'Requirement:', mail.message].join('\n');
+    const payload = { from: `${process.env.SMTP_FROM_NAME || 'Yes We Care'} <${process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER}>`, to: recipient, replyTo: mail.email || undefined, subject: `YWC enquiry - ${mail.service}`, text, html: this.html(mail) };
     return this.transporter().sendMail(payload);
   }
 }

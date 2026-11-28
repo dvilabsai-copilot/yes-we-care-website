@@ -232,7 +232,7 @@ async function main() {
   await seedStaticPages();
   await seedDocxSemanticPages();
 
-  await prisma.siteSetting.upsert({ where: { key: 'enquiry_to_email' }, update: { value: process.env.ENQUIRY_TO_EMAIL || 'info@ywc.care' }, create: { key: 'enquiry_to_email', value: process.env.ENQUIRY_TO_EMAIL || 'info@ywc.care' } });
+  await prisma.siteSetting.upsert({ where: { key: 'enquiry_to_email' }, update: {}, create: { key: 'enquiry_to_email', value: process.env.ENQUIRY_TO_EMAIL || 'info@ywc.care' } });
   await prisma.siteSetting.upsert({ where: { key: 'brand_name' }, update: { value: 'Yes We Care' }, create: { key: 'brand_name', value: 'Yes We Care' } });
   console.log(JSON.stringify({ seeded: true, pages: await prisma.page.count(), staticPages: Object.keys(staticPageFiles).length, services: services.length, faqs: docxFaqs.length, adminEmail }));
 }

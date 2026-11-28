@@ -167,7 +167,12 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
           } catch { /* ignore one malformed section and preserve the remaining page */ }
         });
-        if (main && fragment.childElementCount) main.replaceChildren(fragment);
+        if (main && fragment.childElementCount) {
+          main.replaceChildren(fragment);
+          if (pageKey === 'about' && location.hash === '#service-locations') {
+            document.getElementById('service-locations')?.scrollIntoView({ behavior: 'instant' });
+          }
+        }
       }
       const heroSection = sections.hero;
       const heroCopy = document.querySelector('.page-hero-copy') || document.querySelector('.hero-copy');
