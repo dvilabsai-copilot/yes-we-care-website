@@ -259,6 +259,25 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch { /* static fallback is intentional for offline/local preview use */ }
     finally { if (timer) clearTimeout(timer); }
   }
+  async function loadPublicContactEmail() {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 1500);
+    try {
+      const response = await fetch(`${cmsApiBase}/settings`, {
+        cache: 'no-store',
+        signal: controller.signal,
+      });
+      if (!response.ok) return null;
+      const settings = await response.json();
+      return typeof settings.contact_email === 'string' ? settings.contact_email.trim() : null;
+    } catch {
+      return null;
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  const publicContactEmail = loadPublicContactEmail();
   await applyCmsPageContent();
 
   if (pageKey === 'contact') {
@@ -270,6 +289,22 @@ document.addEventListener('DOMContentLoaded', async () => {
       emailAction.textContent = '✉ Email Us';
       heroActions.append(emailAction);
     }
+  }
+
+  const configuredEmail = await publicContactEmail;
+  if (configuredEmail) {
+    const fallbackEmail = 'info@ywc.care';
+    const fallbackHref = `mailto:${fallbackEmail}`;
+    const configuredHref = `mailto:${encodeURIComponent(configuredEmail).replace('%40', '@')}`;
+    document.querySelectorAll('a[href^="mailto:"]').forEach(link => {
+      const href = link.getAttribute('href');
+      if (href !== fallbackHref && !href.startsWith(`${fallbackHref}?`)) return;
+      link.setAttribute('href', configuredHref + href.slice(fallbackHref.length));
+      const text = document.createTreeWalker(link, NodeFilter.SHOW_TEXT);
+      while (text.nextNode()) {
+        text.currentNode.nodeValue = text.currentNode.nodeValue.replaceAll(fallbackEmail, configuredEmail);
+      }
+    });
   }
 
   const enquirySubmitButton = document.querySelector('#enquiry-form button[type="submit"]');

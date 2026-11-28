@@ -22,9 +22,14 @@
 </nav><div class="side-spacer"></div><div class="side-promo"><div class="orb">✧</div><strong>Care content at a glance.</strong><p>Keep every section clear, compassionate, and aligned with the approved YWC content source.</p></div><div class="side-user"><div class="avatar">A</div><div><strong>Administrator</strong><small>YWC content manager</small></div></div></aside><div class="main"><header class="topbar"><div class="crumb"><span>YWC Care CMS</span><span>/</span><strong id="crumb-title">Content</strong></div><div class="top-actions"><span class="top-date">DOCX content workspace</span><span class="role">Admin access</span><button id="logout" class="btn light">Sign out ↗</button></div></header><main class="content"><div id="workspace-overview"><div class="ribbon">✦ <span><b>Content management workspace</b> · Changes are saved to PostgreSQL and can be reviewed before publishing.</span></div><section class="welcome"><div class="welcome-copy"><span class="eyebrow">YES WE CARE · ADMIN WORKSPACE</span><h1>Shape every care story with confidence.</h1><p>Edit page sections, refine WYSIWYG content, and keep the public experience aligned with the approved YWC content system.</p></div></section><div class="section-row"><div><span class="eyebrow">AT A GLANCE</span><h2>Content overview</h2></div><button class="section-action" id="refresh">↻ Refresh data</button></div><div class="metrics"><div class="metric"><div class="metric-icon">◫</div><div id="page-count" class="metric-value">—</div><b>Published pages</b><small>DOCX-aligned page records</small></div><div class="metric"><div class="metric-icon">✦</div><div class="metric-value">6</div><b>Services</b><small>Care coordination offerings</small></div><div class="metric"><div class="metric-icon">?</div><div class="metric-value">10</div><b>FAQs</b><small>Support questions and answers</small></div><div class="metric"><div class="metric-icon">▤</div><div id="enquiry-count" class="metric-value">—</div><b>Enquiries</b><small>Latest website requests</small></div></div><section class="panel password-panel"><div class="panel-head"><div><span class="eyebrow">ACCOUNT SECURITY</span><h2>Change your password</h2><p>Use a new password of at least 8 characters.</p></div></div><form id="password-form" class="password-form"><div class="field"><span>Current password</span><input id="current-password" type="password" minlength="1" required></div><div class="field"><span>New password</span><input id="new-password" type="password" minlength="8" required></div><div class="field"><span>Confirm new password</span><input id="confirm-password" type="password" minlength="8" required></div><button class="btn" type="submit">Update password</button><p id="password-feedback" class="password-feedback"></p></form></section></div><div class="workspace" id="content-view"><section class="panel"><div class="panel-head"><div><span class="eyebrow">CONTENT LIBRARY</span><h2>Pages</h2><p>Choose a page to edit its seeded content.</p></div></div><div id="pages" class="pages"></div></section><section id="editor" class="panel"><div class="empty-state"><div class="empty-icon">✧</div><div><strong>Select a page to begin</strong><span>Choose a page from the content library to edit its sections.</span></div></div></section></div><section id="enquiries-view" class="panel hidden-view"><div class="panel-head"><div><span class="eyebrow">INBOX</span><h2>Recent enquiries</h2><p>Website enquiries stored by the YWC API.</p></div></div><div id="enquiries-table" class="table-wrap"></div></section>
 <section id="settings-view" class="panel hidden-view">
   <div class="panel-head">
-    <div><h2>Global Settings</h2><p>Manage where website enquiry notifications are sent.</p></div>
+    <div><h2>Global Settings</h2><p>Manage the website contact address and the inbox for form submissions.</p></div>
   </div>
   <form id="settings-form" style="max-width: 34rem">
+    <div class="field">
+      <label for="public-contact-email">Public contact email</label>
+      <input type="email" id="public-contact-email" name="publicContactEmail" required maxlength="254" aria-describedby="public-email-help" disabled>
+      <small id="public-email-help">Shown in the website footer and used by Email Us links.</small>
+    </div>
     <div class="field">
       <label for="enquiry-recipient">Enquiry recipient email</label>
       <input type="email" id="enquiry-recipient" name="enquiryRecipientEmail" required maxlength="254" aria-describedby="recipient-help" disabled>
@@ -70,6 +75,7 @@ document.querySelectorAll('.nav button').forEach(button => {
 
 const settingsForm = $('#settings-form');
 const recipientInput = $('#enquiry-recipient');
+const publicContactInput = $('#public-contact-email');
 const settingsSubmit = settingsForm.querySelector('button[type="submit"]');
 const settingsFeedback = $('#settings-feedback');
 let settingsBusy = false;
@@ -77,6 +83,7 @@ let settingsBusy = false;
 function setSettingsBusy(busy) {
   settingsBusy = busy;
   recipientInput.disabled = busy;
+  publicContactInput.disabled = busy;
   settingsSubmit.disabled = busy;
 }
 
@@ -88,6 +95,7 @@ async function loadSettings() {
   try {
     const settings = await api('/api/admin/settings');
     recipientInput.value = settings.enquiryRecipientEmail;
+    publicContactInput.value = settings.publicContactEmail;
     settingsFeedback.textContent = '';
     setSettingsBusy(false);
   } catch {
@@ -101,15 +109,17 @@ settingsForm.addEventListener('submit', async event => {
   event.preventDefault();
   if (settingsBusy || recipientInput.disabled) return;
   const enquiryRecipientEmail = recipientInput.value.trim();
+  const publicContactEmail = publicContactInput.value.trim();
   setSettingsBusy(true);
   settingsFeedback.className = 'muted';
   settingsFeedback.textContent = 'Saving…';
   try {
     const settings = await api('/api/admin/settings', {
       method: 'PATCH',
-      body: JSON.stringify({ enquiryRecipientEmail })
+      body: JSON.stringify({ enquiryRecipientEmail, publicContactEmail })
     });
     recipientInput.value = settings.enquiryRecipientEmail;
+    publicContactInput.value = settings.publicContactEmail;
     settingsFeedback.className = 'save-note';
     settingsFeedback.textContent = 'Settings saved.';
   } catch {

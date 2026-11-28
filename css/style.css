@@ -229,6 +229,15 @@ img[src$="care-family.jpg"],img[src$="care-at-home.jpg"],img[src$="corporate-tea
   color: var(--green);
   font-weight: 700;
 }
+
+.footer a[href^="mailto:"],
+.page-contact a[href^="mailto:"] {
+  overflow-wrap: anywhere;
+}
+.page-contact .contact-option[href^="mailto:"] > div {
+  min-width: 0;
+}
+
 @media (max-width: 760px) {
   .about-page .service-locations {
     grid-template-columns: 1fr;
