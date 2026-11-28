@@ -1,5 +1,5 @@
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
-import { ENQUIRY_RECIPIENT_KEY } from './enquiry-recipient';
+import { Controller, Get, Header, NotFoundException, Param } from '@nestjs/common';
+import { DEFAULT_PUBLIC_CONTACT_EMAIL, PUBLIC_CONTACT_EMAIL_KEY } from './enquiry-recipient';
 import { PrismaService } from './prisma.service';
 
 @Controller('api/public')
@@ -27,8 +27,14 @@ export class PublicContentController {
   faqs() { return this.prisma.faq.findMany({ where: { isVisible: true }, orderBy: { position: 'asc' } }); }
 
   @Get('settings')
+  @Header('Cache-Control', 'no-store')
   async settings() {
-    const rows = await this.prisma.siteSetting.findMany({ where: { key: { not: ENQUIRY_RECIPIENT_KEY } } });
-    return Object.fromEntries(rows.map(row => [row.key, row.value]));
+    const rows = await this.prisma.siteSetting.findMany({
+      where: { key: { in: ['brand_name', PUBLIC_CONTACT_EMAIL_KEY] } },
+    });
+    return {
+      [PUBLIC_CONTACT_EMAIL_KEY]: DEFAULT_PUBLIC_CONTACT_EMAIL,
+      ...Object.fromEntries(rows.map(row => [row.key, row.value])),
+    };
   }
 }

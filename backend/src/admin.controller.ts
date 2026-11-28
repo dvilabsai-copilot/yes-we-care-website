@@ -1,16 +1,23 @@
-import { Body, Controller, Delete, Get, Param, Patch, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Header, Param, Patch, UseGuards } from '@nestjs/common';
 import { Transform } from 'class-transformer';
-import { IsEmail, MaxLength } from 'class-validator';
+import { IsEmail, MaxLength, ValidateIf } from 'class-validator';
 import sanitizeHtml from 'sanitize-html';
 import { AdminAuthGuard } from './auth';
-import { ENQUIRY_RECIPIENT_KEY, getEnquiryRecipient } from './enquiry-recipient';
+import { ENQUIRY_RECIPIENT_KEY, getEnquiryRecipient, getPublicContactEmail, PUBLIC_CONTACT_EMAIL_KEY } from './enquiry-recipient';
 import { PrismaService } from './prisma.service';
 
 export class UpdateGlobalSettingsDto {
   @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
+  @ValidateIf((_settings, value) => value !== undefined)
   @IsEmail()
   @MaxLength(254)
-  enquiryRecipientEmail!: string;
+  enquiryRecipientEmail?: string;
+
+  @Transform(({ value }) => typeof value === 'string' ? value.trim() : value)
+  @ValidateIf((_settings, value) => value !== undefined)
+  @IsEmail()
+  @MaxLength(254)
+  publicContactEmail?: string;
 }
 
 const contentHtmlOptions: sanitizeHtml.IOptions = {
@@ -85,17 +92,30 @@ export class AdminController {
   enquiries() { return this.prisma.enquiry.findMany({ orderBy: { createdAt: 'desc' }, take: 100 }); }
 
   @Get('settings')
+  @Header('Cache-Control', 'no-store')
   async settings() {
-    return { enquiryRecipientEmail: await getEnquiryRecipient(this.prisma) };
+    const [enquiryRecipientEmail, publicContactEmail] = await Promise.all([
+      getEnquiryRecipient(this.prisma),
+      getPublicContactEmail(this.prisma),
+    ]);
+    return { enquiryRecipientEmail, publicContactEmail };
   }
 
   @Patch('settings')
-  async updateSettings(@Body() { enquiryRecipientEmail }: UpdateGlobalSettingsDto) {
-    const saved = await this.prisma.siteSetting.upsert({
-      where: { key: ENQUIRY_RECIPIENT_KEY },
-      update: { value: enquiryRecipientEmail },
-      create: { key: ENQUIRY_RECIPIENT_KEY, value: enquiryRecipientEmail },
+  async updateSettings(@Body() { enquiryRecipientEmail, publicContactEmail }: UpdateGlobalSettingsDto) {
+    const entries = [
+      [ENQUIRY_RECIPIENT_KEY, enquiryRecipientEmail],
+      [PUBLIC_CONTACT_EMAIL_KEY, publicContactEmail],
+    ] as const;
+    const writes = entries.flatMap(([key, value]) => {
+      if (value === undefined) return [];
+      return [this.prisma.siteSetting.upsert({
+        where: { key },
+        update: { value },
+        create: { key, value },
+      })];
     });
-    return { enquiryRecipientEmail: saved.value };
+    if (writes.length) await this.prisma.$transaction(writes);
+    return this.settings();
   }
 }
