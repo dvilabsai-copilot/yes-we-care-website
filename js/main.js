@@ -277,19 +277,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  const publicContactEmail = loadPublicContactEmail();
-  await applyCmsPageContent();
+  const supportEmailHref = 'mailto:info@ywc.care?subject=Website%20enquiry%20-%20Yes%20We%20Care';
 
-  if (pageKey === 'contact') {
-    const heroActions = document.querySelector('.page-hero .actions, .hero .actions');
-    if (heroActions && !heroActions.querySelector('a[href^="mailto:"]')) {
-      const emailAction = document.createElement('a');
-      emailAction.className = 'btn btn-secondary';
-      emailAction.href = 'mailto:info@ywc.care?subject=Website%20enquiry%20-%20Yes%20We%20Care';
-      emailAction.textContent = '✉ Email Us';
-      heroActions.append(emailAction);
+  function addSupportEmailActions() {
+    for (const call of document.querySelectorAll('main a.btn[href^="tel:"]')) {
+      if (!/\bcall (?:us|ywc)$/i.test(call.textContent.trim())) continue;
+      let actions = call.closest('.actions');
+      if (actions?.querySelector('a[href^="mailto:"]')) continue;
+      if (!actions) {
+        actions = document.createElement('div');
+        actions.className = 'actions';
+        call.before(actions);
+        actions.append(call);
+      }
+      const email = document.createElement('a');
+      email.className = 'btn btn-secondary';
+      email.href = supportEmailHref;
+      email.innerHTML = '<span aria-hidden="true">✉</span> Email Us';
+      call.after(email);
+    }
+
+    const callText = /\bcall us at 9952040006\b/i;
+    for (const answer of document.querySelectorAll('main details p')) {
+      if (answer.querySelector('a[href^="mailto:"]')) continue;
+      const call = [...answer.childNodes].find(node => node.nodeType === Node.TEXT_NODE && callText.test(node.nodeValue));
+      if (!call) continue;
+      const match = callText.exec(call.nodeValue);
+      const end = match.index + match[0].length;
+      const trailing = call.nodeValue.slice(end);
+      const hasFormOption = /^ or complete\b/i.test(trailing);
+      const email = document.createElement('a');
+      email.href = supportEmailHref;
+      email.textContent = 'email us';
+      call.before(call.nodeValue.slice(0, end) + (hasFormOption ? ', ' : ' or '), email);
+      call.nodeValue = (hasFormOption ? ',' : '') + trailing;
     }
   }
+
+  const publicContactEmail = loadPublicContactEmail();
+  addSupportEmailActions();
+  await applyCmsPageContent();
+  addSupportEmailActions();
 
   const configuredEmail = await publicContactEmail;
   if (configuredEmail) {
