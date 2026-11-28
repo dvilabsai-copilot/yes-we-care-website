@@ -253,7 +253,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   await applyCmsPageContent();
 
   if (pageKey === 'contact') {
-    const heroActions = document.querySelector('.page-hero .actions');
+    const heroActions = document.querySelector('.page-hero .actions, .hero .actions');
     if (heroActions && !heroActions.querySelector('a[href^="mailto:"]')) {
       const emailAction = document.createElement('a');
       emailAction.className = 'btn btn-secondary';
