@@ -87,7 +87,7 @@ function applyDocxStaticContent(slug: string, sections: StaticSection[]) {
     }
     if (slug === 'home' && position === 3) {
       title = docxText(123);
-      bodyHtml = `<div class="container split"><div><span class="eyebrow">WHY CHOOSE YES WE CARE</span><h2>${escapeHtml(docxText(123))}</h2>${docxP(124)}<ul class="checklist">${[125, 127, 129, 131, 133, 135].map(index => `<li>${escapeHtml(docxText(index))}</li>`).join('')}</ul>${docxP(137)}</div><div class="why-visual"><img class="rounded-image" src="assets/care-at-home.jpg" alt="Illustrative family care imagery"><blockquote>Having someone who truly cares and coordinates everything gave us much-needed peace of mind.</blockquote></div></div>`;
+      bodyHtml = `<div class="container split"><div><span class="eyebrow">WHY CHOOSE YES WE CARE</span><h2>${escapeHtml(docxText(123))}</h2>${docxP(124)}<ul class="checklist">${[125, 127, 129, 131, 133, 135].map(index => `<li>${escapeHtml(docxText(index))}</li>`).join('')}</ul>${docxP(137)}</div><div class="why-visual"><img class="rounded-image" src="assets/approved-why-wide.png" alt="Illustrative family care imagery"><blockquote>Having someone who truly cares and coordinates everything gave us much-needed peace of mind.</blockquote></div></div>`;
     }
     if (slug === 'home' && position === 4) {
       title = docxText(172);
@@ -95,7 +95,7 @@ function applyDocxStaticContent(slug: string, sections: StaticSection[]) {
     }
     if (slug === 'home' && position === 5) {
       title = docxText(140);
-      bodyHtml = `<div class="container split"><div class="corporate-photo"><img class="rounded-image" src="assets/corporate-team.jpg" alt="Illustrative workplace support imagery"></div><div><span class="eyebrow">FOR ORGANIZATIONS</span><h2>${escapeHtml(docxText(140))}</h2>${[141, 142, 143].map(docxP).join('')}<a class="btn btn-outline" href="corporate-care.html">Know More →</a></div><ul class="corporate-highlights"><li><span>♧</span><strong>${escapeHtml(docxText(157))}</strong></li><li><span>▣</span><strong>${escapeHtml(docxText(158))}</strong></li><li><span>♧</span><strong>${escapeHtml(docxText(159))}</strong></li><li><span>♡</span><strong>${escapeHtml(docxText(160))}</strong></li><li><span>♢</span><strong>${escapeHtml(docxText(161))}</strong></li></ul></div>`;
+      bodyHtml = `<div class="container split"><div class="corporate-photo"><img class="rounded-image" src="assets/approved-corporate-wide.png" alt="Illustrative workplace support imagery"></div><div><span class="eyebrow">FOR ORGANIZATIONS</span><h2>${escapeHtml(docxText(140))}</h2>${[141, 142, 143].map(docxP).join('')}<a class="btn btn-outline" href="corporate-care.html">Know More →</a></div><ul class="corporate-highlights"><li><span>♧</span><strong>${escapeHtml(docxText(157))}</strong></li><li><span>▣</span><strong>${escapeHtml(docxText(158))}</strong></li><li><span>♧</span><strong>${escapeHtml(docxText(159))}</strong></li><li><span>♡</span><strong>${escapeHtml(docxText(160))}</strong></li><li><span>♢</span><strong>${escapeHtml(docxText(161))}</strong></li></ul></div>`;
     }
     if (slug === 'home' && position === 6) { title = docxText(233); bodyHtml = `<div><h2>${escapeHtml(docxText(233))}</h2>${docxP(234)}</div>${section.bodyHtml.slice(section.bodyHtml.indexOf('<div class="actions">'))}`; }
     if (slug === 'about' && position === 0) bodyHtml = replaceHeroCopy(bodyHtml, docxP(10), 'about-hero-copy');
